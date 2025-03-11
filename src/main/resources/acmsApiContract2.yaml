@@ -1,0 +1,3834 @@
+openapi: 3.0.2
+info:
+  title: Amazon Ads Campaign Management APIs
+  version: beta_2025_02_13
+  description: |- 
+    Amazon Ads Campaign Management APIs represent functionality needed to create, read, update and delete campaign management objects for Campaigns, Ad Groups, Ads, and Targets. These Campaign Management APIs are adProduct agnostic and use the same set versioning across the board, and one set of feature naming to represent similar ideas. This API will support all campaign management API functionality currently available for Sponsored Products, Sponsored Brands, Amazon DSP, and Global Campaigns using one set of API resources at launch.
+    
+    <p> To get started, see our guide documentation <a herf="">here-pending</a>. For more information on the campaign structure and hierarchy, see <a href="">here-pending</a>.
+    
+    <p><b>Prerequisites:</b> For campaign management APIs, you must select an advertiser account for campaign actions to operate on, which are covered by the below APIs:
+    <ul><li><a href="https://advertising.amazon.com/API/docs/en-us/reference/2/profiles">Profiles</a> for SP and SB single marketplace advertisers.</li>
+    <li><a href="https://advertising.amazon.com/API/docs/en-us/account-management">Advertising Accounts</a> to select Global Advertisers for use with Global Campaigns.</li>
+    <li><a href="https://advertising.amazon.com/API/docs/en-us/reference/2/profiles">Profiles</a> and <a href="https://advertising.amazon.com/API/docs/en-us/dsp-advertiser">DSP Advertiser</a> to select DSP accounts.
+    </ul>
+    <p><b>Optional Recommendations:</B>You can use your existing accounts, or you can create a <a href="https://advertising.amazon.com/API/docs/en-us/test-accounts/openapi">test account</a> for testing. See <a href="https://advertising.amazon.com/API/docs/en-us/guides/account-management/test-accounts/overview">Test Account Overview</a> for more information on setup.
+    
+    <p><b>Beta Specific Notes:</B> you can file issues and feedback within Jira to the existing pilot ticket. To report bugs, we recommend a separate tickets using <b>"/adsapi/v1/create/campaigns (New Campaign APIs for 2025)"</b> as the symptom path to route this to the correct ticket queue.
+    <p>Changelist during beta:
+    <ol><li>2/13 - typo Amazon-Ads-ClientId corrected to Amazon-Advertising-API-ClientId in contract</li>
+    </ol>
+  contact:
+    name: Jira - Closed Beta Support
+    url: https://amzn-clicks.atlassian.net/servicedesk/customer/portal/2/group/2/create/6
+tags: 
+  - name: Campaigns
+    description: These are objects that represent your marketing objective
+    externalDocs: 
+      url: https://advertising.amazon.com/API/docs/en-us/guides/sponsored-products/campaigns
+  - name: AdGroups
+    description: These are objects that hold your targeting settings and applicable offers you want to show to a shopper/viewer
+    externalDocs: 
+      url: https://advertising.amazon.com/API/docs/en-us/guides/sponsored-products/ad-groups
+  - name: Ads
+    description: These are objects that represent the promoted offer to the shopper/viewer
+    externalDocs: 
+      url: https://advertising.amazon.com/API/docs/en-us/guides/sponsored-products/product-ads
+  - name: Targets 
+    description: These are objects that determine how to target/reach a shopper or viewer
+    externalDocs: 
+      url: https://advertising.amazon.com/API/docs/en-us/guides/sponsored-products/keywords/overview
+servers:
+  - url: https://advertising-api.amazon.com
+    description: Production NA
+  - url: https://advertising-api-eu.amazon.com
+    description: Production EU
+  - url: https://advertising-api-fe.amazon.com
+    description: Production FE
+paths:
+  /adsApi/v1/create/adGroups:
+    post:
+      security:
+        - oAuth2: [advertising::campaign_management]
+      operationId: CreateAdGroup
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateAdGroupRequest'
+      parameters:
+        - $ref: '#/components/parameters/ClientIdHeader'
+        - $ref: '#/components/parameters/ScopeHeader'
+      responses:
+        '207':
+          description: CreateAdGroup 207 response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdGroupMultiStatusResponse'
+        '400':
+          description: BadRequest 400 response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestResponseContent'
+        '401':
+          description: Unauthorized 401 response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedResponseContent'
+        '403':
+          description: Forbidden 403 response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ForbiddenResponseContent'
+        '404':
+          description: NotFound 404 response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundResponseContent'
+        '413':
+          description: ContentTooLarge 413 response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ContentTooLargeResponseContent'
+        '429':
+          description: TooManyRequests 429 response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TooManyRequestsResponseContent'
+        '500':
+          description: InternalServerError 500 response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerErrorResponseContent'
+        '502':
+          description: BadGateway 502 response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadGatewayResponseContent'
+        '503':
+          description: ServiceUnavailableError 503 response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServiceUnavailableErrorResponseContent'
+        '504':
+          description: GatewayTimeout 504 response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GatewayTimeoutResponseContent'
+      tags:
+        - AdGroups
+  /adsApi/v1/create/ads:
+    post:
+      operationId: CreateAd
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateAdRequest'
+      parameters:
+        - $ref: '#/components/parameters/ClientIdHeader'
+        - $ref: '#/components/parameters/ScopeHeader'
+      responses:
+        '207':
+          description: CreateAd 207 response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdMultiStatusResponse'
+        '400':
+          description: BadRequest 400 response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestResponseContent'
+        '401':
+          description: Unauthorized 401 response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedResponseContent'
+        '403':
+          description: Forbidden 403 response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ForbiddenResponseContent'
+        '404':
+          description: NotFound 404 response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundResponseContent'
+        '413':
+          description: ContentTooLarge 413 response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ContentTooLargeResponseContent'
+        '429':
+          description: TooManyRequests 429 response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TooManyRequestsResponseContent'
+        '500':
+          description: InternalServerError 500 response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerErrorResponseContent'
+        '502':
+          description: BadGateway 502 response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadGatewayResponseContent'
+        '503':
+          description: ServiceUnavailableError 503 response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServiceUnavailableErrorResponseContent'
+        '504':
+          description: GatewayTimeout 504 response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GatewayTimeoutResponseContent'
+      tags:
+        - Ads
+  /adsApi/v1/create/campaigns:
+    post:
+      operationId: CreateCampaign
+      security:
+        - oAuth2: [advertising::campaign_management]
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateCampaignRequest'
+      parameters:
+        - $ref: '#/components/parameters/ClientIdHeader'
+        - $ref: '#/components/parameters/ScopeHeader'
+      responses:
+        '207':
+          description: CreateCampaign 207 response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CampaignMultiStatusResponse'
+        '400':
+          description: BadRequest 400 response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestResponseContent'
+        '401':
+          description: Unauthorized 401 response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedResponseContent'
+        '403':
+          description: Forbidden 403 response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ForbiddenResponseContent'
+        '404':
+          description: NotFound 404 response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundResponseContent'
+        '413':
+          description: ContentTooLarge 413 response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ContentTooLargeResponseContent'
+        '429':
+          description: TooManyRequests 429 response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TooManyRequestsResponseContent'
+        '500':
+          description: InternalServerError 500 response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerErrorResponseContent'
+        '502':
+          description: BadGateway 502 response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadGatewayResponseContent'
+        '503':
+          description: ServiceUnavailableError 503 response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServiceUnavailableErrorResponseContent'
+        '504':
+          description: GatewayTimeout 504 response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GatewayTimeoutResponseContent'
+      tags:
+        - Campaigns
+  /adsApi/v1/create/targets:
+    post:
+      operationId: CreateTarget
+      security:
+        - oAuth2: [advertising::campaign_management]
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateTargetRequest'
+      parameters:
+        - $ref: '#/components/parameters/ClientIdHeader'
+        - $ref: '#/components/parameters/ScopeHeader'
+      responses:
+        '207':
+          description: CreateTarget 207 response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TargetMultiStatusResponse'
+        '400':
+          description: BadRequest 400 response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestResponseContent'
+        '401':
+          description: Unauthorized 401 response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedResponseContent'
+        '403':
+          description: Forbidden 403 response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ForbiddenResponseContent'
+        '404':
+          description: NotFound 404 response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundResponseContent'
+        '413':
+          description: ContentTooLarge 413 response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ContentTooLargeResponseContent'
+        '429':
+          description: TooManyRequests 429 response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TooManyRequestsResponseContent'
+        '500':
+          description: InternalServerError 500 response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerErrorResponseContent'
+        '502':
+          description: BadGateway 502 response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadGatewayResponseContent'
+        '503':
+          description: ServiceUnavailableError 503 response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServiceUnavailableErrorResponseContent'
+        '504':
+          description: GatewayTimeout 504 response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GatewayTimeoutResponseContent'
+      tags:
+        - Targets
+  /adsApi/v1/delete/adGroups:
+    post:
+      operationId: DeleteAdGroup
+      security:
+        - oAuth2: [advertising::campaign_management]
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DeleteAdGroupRequest'
+      parameters:
+        - $ref: '#/components/parameters/ClientIdHeader'
+        - $ref: '#/components/parameters/ScopeHeader'
+      responses:
+        '207':
+          description: DeleteAdGroup 207 response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdGroupMultiStatusResponse'
+        '400':
+          description: BadRequest 400 response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestResponseContent'
+        '401':
+          description: Unauthorized 401 response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedResponseContent'
+        '403':
+          description: Forbidden 403 response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ForbiddenResponseContent'
+        '404':
+          description: NotFound 404 response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundResponseContent'
+        '413':
+          description: ContentTooLarge 413 response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ContentTooLargeResponseContent'
+        '429':
+          description: TooManyRequests 429 response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TooManyRequestsResponseContent'
+        '500':
+          description: InternalServerError 500 response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerErrorResponseContent'
+        '502':
+          description: BadGateway 502 response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadGatewayResponseContent'
+        '503':
+          description: ServiceUnavailableError 503 response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServiceUnavailableErrorResponseContent'
+        '504':
+          description: GatewayTimeout 504 response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GatewayTimeoutResponseContent'
+      tags:
+        - AdGroups
+  /adsApi/v1/delete/ads:
+    post:
+      operationId: DeleteAd
+      security:
+        - oAuth2: [advertising::campaign_management]
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DeleteAdRequest'
+      parameters:
+        - $ref: '#/components/parameters/ClientIdHeader'
+        - $ref: '#/components/parameters/ScopeHeader'
+      responses:
+        '207':
+          description: DeleteAd 207 response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdMultiStatusResponse'
+        '400':
+          description: BadRequest 400 response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestResponseContent'
+        '401':
+          description: Unauthorized 401 response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedResponseContent'
+        '403':
+          description: Forbidden 403 response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ForbiddenResponseContent'
+        '404':
+          description: NotFound 404 response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundResponseContent'
+        '413':
+          description: ContentTooLarge 413 response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ContentTooLargeResponseContent'
+        '429':
+          description: TooManyRequests 429 response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TooManyRequestsResponseContent'
+        '500':
+          description: InternalServerError 500 response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerErrorResponseContent'
+        '502':
+          description: BadGateway 502 response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadGatewayResponseContent'
+        '503':
+          description: ServiceUnavailableError 503 response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServiceUnavailableErrorResponseContent'
+        '504':
+          description: GatewayTimeout 504 response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GatewayTimeoutResponseContent'
+      tags:
+        - Ads
+  /adsApi/v1/delete/campaigns:
+    post:
+      operationId: DeleteCampaign
+      security:
+        - oAuth2: [advertising::campaign_management]
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DeleteCampaignRequest'
+      parameters:
+        - $ref: '#/components/parameters/ClientIdHeader'
+        - $ref: '#/components/parameters/ScopeHeader'
+      responses:
+        '207':
+          description: DeleteCampaign 207 response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CampaignMultiStatusResponse'
+        '400':
+          description: BadRequest 400 response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestResponseContent'
+        '401':
+          description: Unauthorized 401 response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedResponseContent'
+        '403':
+          description: Forbidden 403 response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ForbiddenResponseContent'
+        '404':
+          description: NotFound 404 response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundResponseContent'
+        '413':
+          description: ContentTooLarge 413 response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ContentTooLargeResponseContent'
+        '429':
+          description: TooManyRequests 429 response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TooManyRequestsResponseContent'
+        '500':
+          description: InternalServerError 500 response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerErrorResponseContent'
+        '502':
+          description: BadGateway 502 response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadGatewayResponseContent'
+        '503':
+          description: ServiceUnavailableError 503 response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServiceUnavailableErrorResponseContent'
+        '504':
+          description: GatewayTimeout 504 response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GatewayTimeoutResponseContent'
+      tags:
+        - Campaigns
+  /adsApi/v1/delete/targets:
+    post:
+      operationId: DeleteTarget
+      security:
+        - oAuth2: [advertising::campaign_management]
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DeleteTargetRequest'
+      parameters:
+        - $ref: '#/components/parameters/ClientIdHeader'
+        - $ref: '#/components/parameters/ScopeHeader'
+      responses:
+        '207':
+          description: DeleteTarget 207 response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TargetMultiStatusResponse'
+        '400':
+          description: BadRequest 400 response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestResponseContent'
+        '401':
+          description: Unauthorized 401 response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedResponseContent'
+        '403':
+          description: Forbidden 403 response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ForbiddenResponseContent'
+        '404':
+          description: NotFound 404 response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundResponseContent'
+        '413':
+          description: ContentTooLarge 413 response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ContentTooLargeResponseContent'
+        '429':
+          description: TooManyRequests 429 response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TooManyRequestsResponseContent'
+        '500':
+          description: InternalServerError 500 response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerErrorResponseContent'
+        '502':
+          description: BadGateway 502 response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadGatewayResponseContent'
+        '503':
+          description: ServiceUnavailableError 503 response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServiceUnavailableErrorResponseContent'
+        '504':
+          description: GatewayTimeout 504 response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GatewayTimeoutResponseContent'
+      tags:
+        - Targets
+  /adsApi/v1/query/adGroups:
+    post:
+      operationId: QueryAdGroup
+      security:
+        - oAuth2: [advertising::campaign_management]
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/QueryAdGroupRequest'
+      parameters:
+        - $ref: '#/components/parameters/ClientIdHeader'
+        - $ref: '#/components/parameters/ScopeHeader'
+      responses:
+        '200':
+          description: QueryAdGroup 200 response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdGroupSuccessResponse'
+        '400':
+          description: BadRequest 400 response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestResponseContent'
+        '401':
+          description: Unauthorized 401 response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedResponseContent'
+        '403':
+          description: Forbidden 403 response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ForbiddenResponseContent'
+        '404':
+          description: NotFound 404 response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundResponseContent'
+        '413':
+          description: ContentTooLarge 413 response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ContentTooLargeResponseContent'
+        '429':
+          description: TooManyRequests 429 response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TooManyRequestsResponseContent'
+        '500':
+          description: InternalServerError 500 response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerErrorResponseContent'
+        '502':
+          description: BadGateway 502 response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadGatewayResponseContent'
+        '503':
+          description: ServiceUnavailableError 503 response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServiceUnavailableErrorResponseContent'
+        '504':
+          description: GatewayTimeout 504 response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GatewayTimeoutResponseContent'
+      tags:
+        - AdGroups
+  /adsApi/v1/query/ads:
+    post:
+      operationId: QueryAd
+      security:
+        - oAuth2: [advertising::campaign_management]
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/QueryAdRequest'
+      parameters:
+        - $ref: '#/components/parameters/ClientIdHeader'
+        - $ref: '#/components/parameters/ScopeHeader'
+      responses:
+        '200':
+          description: QueryAd 200 response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdSuccessResponse'
+        '400':
+          description: BadRequest 400 response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestResponseContent'
+        '401':
+          description: Unauthorized 401 response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedResponseContent'
+        '403':
+          description: Forbidden 403 response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ForbiddenResponseContent'
+        '404':
+          description: NotFound 404 response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundResponseContent'
+        '413':
+          description: ContentTooLarge 413 response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ContentTooLargeResponseContent'
+        '429':
+          description: TooManyRequests 429 response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TooManyRequestsResponseContent'
+        '500':
+          description: InternalServerError 500 response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerErrorResponseContent'
+        '502':
+          description: BadGateway 502 response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadGatewayResponseContent'
+        '503':
+          description: ServiceUnavailableError 503 response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServiceUnavailableErrorResponseContent'
+        '504':
+          description: GatewayTimeout 504 response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GatewayTimeoutResponseContent'
+      tags:
+        - Ads
+  /adsApi/v1/query/campaigns:
+    post:
+      operationId: QueryCampaign
+      security:
+        - oAuth2: [advertising::campaign_management]
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/QueryCampaignRequest'
+      parameters:
+        - $ref: '#/components/parameters/ClientIdHeader'
+        - $ref: '#/components/parameters/ScopeHeader'
+      responses:
+        '200':
+          description: QueryCampaign 200 response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CampaignSuccessResponse'
+        '400':
+          description: BadRequest 400 response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestResponseContent'
+        '401':
+          description: Unauthorized 401 response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedResponseContent'
+        '403':
+          description: Forbidden 403 response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ForbiddenResponseContent'
+        '404':
+          description: NotFound 404 response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundResponseContent'
+        '413':
+          description: ContentTooLarge 413 response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ContentTooLargeResponseContent'
+        '429':
+          description: TooManyRequests 429 response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TooManyRequestsResponseContent'
+        '500':
+          description: InternalServerError 500 response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerErrorResponseContent'
+        '502':
+          description: BadGateway 502 response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadGatewayResponseContent'
+        '503':
+          description: ServiceUnavailableError 503 response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServiceUnavailableErrorResponseContent'
+        '504':
+          description: GatewayTimeout 504 response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GatewayTimeoutResponseContent'
+      tags:
+        - Campaigns
+  /adsApi/v1/query/targets:
+    post:
+      operationId: QueryTarget
+      security:
+        - oAuth2: [advertising::campaign_management]
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/QueryTargetRequest'
+      parameters:
+        - $ref: '#/components/parameters/ClientIdHeader'
+        - $ref: '#/components/parameters/ScopeHeader'
+      responses:
+        '200':
+          description: QueryTarget 200 response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TargetSuccessResponse'
+        '400':
+          description: BadRequest 400 response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestResponseContent'
+        '401':
+          description: Unauthorized 401 response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedResponseContent'
+        '403':
+          description: Forbidden 403 response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ForbiddenResponseContent'
+        '404':
+          description: NotFound 404 response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundResponseContent'
+        '413':
+          description: ContentTooLarge 413 response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ContentTooLargeResponseContent'
+        '429':
+          description: TooManyRequests 429 response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TooManyRequestsResponseContent'
+        '500':
+          description: InternalServerError 500 response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerErrorResponseContent'
+        '502':
+          description: BadGateway 502 response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadGatewayResponseContent'
+        '503':
+          description: ServiceUnavailableError 503 response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServiceUnavailableErrorResponseContent'
+        '504':
+          description: GatewayTimeout 504 response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GatewayTimeoutResponseContent'
+      tags:
+        - Targets
+  /adsApi/v1/update/adGroups:
+    post:
+      operationId: UpdateAdGroup
+      security:
+        - oAuth2: [advertising::campaign_management]
+
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateAdGroupRequest'
+      parameters:
+        - $ref: '#/components/parameters/ClientIdHeader'
+        - $ref: '#/components/parameters/ScopeHeader'
+      responses:
+        '207':
+          description: UpdateAdGroup 207 response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdGroupMultiStatusResponse'
+        '400':
+          description: BadRequest 400 response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestResponseContent'
+        '401':
+          description: Unauthorized 401 response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedResponseContent'
+        '403':
+          description: Forbidden 403 response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ForbiddenResponseContent'
+        '404':
+          description: NotFound 404 response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundResponseContent'
+        '413':
+          description: ContentTooLarge 413 response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ContentTooLargeResponseContent'
+        '429':
+          description: TooManyRequests 429 response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TooManyRequestsResponseContent'
+        '500':
+          description: InternalServerError 500 response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerErrorResponseContent'
+        '502':
+          description: BadGateway 502 response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadGatewayResponseContent'
+        '503':
+          description: ServiceUnavailableError 503 response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServiceUnavailableErrorResponseContent'
+        '504':
+          description: GatewayTimeout 504 response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GatewayTimeoutResponseContent'
+      tags:
+        - AdGroups
+  /adsApi/v1/update/ads:
+    post:
+      operationId: UpdateAd
+      security:
+        - oAuth2: [advertising::campaign_management]
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateAdRequest'
+      parameters:
+        - $ref: '#/components/parameters/ClientIdHeader'
+        - $ref: '#/components/parameters/ScopeHeader'
+      responses:
+        '207':
+          description: UpdateAd 207 response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdMultiStatusResponse'
+        '400':
+          description: BadRequest 400 response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestResponseContent'
+        '401':
+          description: Unauthorized 401 response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedResponseContent'
+        '403':
+          description: Forbidden 403 response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ForbiddenResponseContent'
+        '404':
+          description: NotFound 404 response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundResponseContent'
+        '413':
+          description: ContentTooLarge 413 response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ContentTooLargeResponseContent'
+        '429':
+          description: TooManyRequests 429 response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TooManyRequestsResponseContent'
+        '500':
+          description: InternalServerError 500 response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerErrorResponseContent'
+        '502':
+          description: BadGateway 502 response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadGatewayResponseContent'
+        '503':
+          description: ServiceUnavailableError 503 response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServiceUnavailableErrorResponseContent'
+        '504':
+          description: GatewayTimeout 504 response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GatewayTimeoutResponseContent'
+      tags:
+        - Ads
+  /adsApi/v1/update/campaigns:
+    post:
+      operationId: UpdateCampaign
+      security:
+        - oAuth2: [advertising::campaign_management]
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateCampaignRequest'
+      parameters:
+        - $ref: '#/components/parameters/ClientIdHeader'
+        - $ref: '#/components/parameters/ScopeHeader'
+      responses:
+        '207':
+          description: UpdateCampaign 207 response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CampaignMultiStatusResponse'
+        '400':
+          description: BadRequest 400 response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestResponseContent'
+        '401':
+          description: Unauthorized 401 response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedResponseContent'
+        '403':
+          description: Forbidden 403 response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ForbiddenResponseContent'
+        '404':
+          description: NotFound 404 response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundResponseContent'
+        '413':
+          description: ContentTooLarge 413 response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ContentTooLargeResponseContent'
+        '429':
+          description: TooManyRequests 429 response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TooManyRequestsResponseContent'
+        '500':
+          description: InternalServerError 500 response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerErrorResponseContent'
+        '502':
+          description: BadGateway 502 response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadGatewayResponseContent'
+        '503':
+          description: ServiceUnavailableError 503 response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServiceUnavailableErrorResponseContent'
+        '504':
+          description: GatewayTimeout 504 response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GatewayTimeoutResponseContent'
+      tags:
+        - Campaigns
+  /adsApi/v1/update/targets:
+    post:
+      operationId: UpdateTarget
+      security:
+        - oAuth2: [advertising::campaign_management]
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateTargetRequest'
+      parameters:
+        - $ref: '#/components/parameters/ClientIdHeader'
+        - $ref: '#/components/parameters/ScopeHeader'
+      responses:
+        '207':
+          description: UpdateTarget 207 response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TargetMultiStatusResponse'
+        '400':
+          description: BadRequest 400 response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestResponseContent'
+        '401':
+          description: Unauthorized 401 response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedResponseContent'
+        '403':
+          description: Forbidden 403 response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ForbiddenResponseContent'
+        '404':
+          description: NotFound 404 response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundResponseContent'
+        '413':
+          description: ContentTooLarge 413 response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ContentTooLargeResponseContent'
+        '429':
+          description: TooManyRequests 429 response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TooManyRequestsResponseContent'
+        '500':
+          description: InternalServerError 500 response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerErrorResponseContent'
+        '502':
+          description: BadGateway 502 response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadGatewayResponseContent'
+        '503':
+          description: ServiceUnavailableError 503 response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServiceUnavailableErrorResponseContent'
+        '504':
+          description: GatewayTimeout 504 response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GatewayTimeoutResponseContent'
+      tags:
+        - Targets
+components:
+  securitySchemes:
+    OAuth2:
+      type: oauth2
+      flows:
+        authorizationCode:
+          authorizationUrl: https://www.amazon.com/ap/oa
+          tokenUrl: https://api.amazon.com/auth/o2/token
+          scopes:
+            advertising::campaign_management: Grants write access to campaign management.
+            cpc_advertising:campaign_management: Grants write access to campaign management. Legacy name (no difference from advertising::campaign_management)
+            advertising::test:create_account: Grants write access to create test accounts functionality
+            advertising::audiences: Grants access to data provider APIs
+  schemas:
+    Ad:
+      type: object
+      properties:
+        status:
+          $ref: '#/components/schemas/Status'
+        adType:
+          $ref: '#/components/schemas/AdType'
+        adId:
+          type: string
+          description: The identifier of the ad.
+        marketplaces:
+          type: array
+          items:
+            $ref: '#/components/schemas/Marketplace'
+          maxItems: 1
+          minItems: 1
+        adProduct:
+          $ref: '#/components/schemas/AdProduct'
+        state:
+          $ref: '#/components/schemas/States'
+        lastUpdatedDateTime:
+          type: string
+          description: The date time that the ad was last updated.
+          format: date-time
+        marketplaceScope:
+          $ref: '#/components/schemas/MarketplaceScope'
+        adGroupId:
+          type: string
+          description: The ad group associated with the ad.
+        tags:
+          type: array
+          items:
+            $ref: '#/components/schemas/Tag'
+          maxItems: 50
+          minItems: 0
+          description: Open ended labels with a key value pair applied to the ad
+        creative:
+          $ref: '#/components/schemas/Creative'
+        creationDateTime:
+          type: string
+          description: The date time that the ad was created.
+          format: date-time
+      required:
+        - adGroupId
+        - adId
+        - adProduct
+        - adType
+        - creationDateTime
+        - creative
+        - lastUpdatedDateTime
+        - marketplaceScope
+        - marketplaces
+        - state
+        - status
+    AdAdGroupIdFilter:
+      type: object
+      properties:
+        include:
+          type: array
+          items:
+            type: string
+          maxItems: 100
+          minItems: 0
+      required:
+        - include
+    AdAdProductFilter:
+      type: object
+      properties:
+        include:
+          type: array
+          items:
+            $ref: '#/components/schemas/AdProduct'
+          maxItems: 1
+          minItems: 1
+      required:
+        - include
+    AdCreate:
+      type: object
+      properties:
+        status:
+          $ref: '#/components/schemas/CreateStatus'
+        marketplaces:
+          type: array
+          items:
+            $ref: '#/components/schemas/Marketplace'
+          maxItems: 1
+          minItems: 1
+        adProduct:
+          $ref: '#/components/schemas/AdProduct'
+        state:
+          $ref: '#/components/schemas/CreateStates'
+        marketplaceScope:
+          $ref: '#/components/schemas/MarketplaceScope'
+        adGroupId:
+          type: string
+          description: The ad group associated with the ad.
+        tags:
+          type: array
+          items:
+            $ref: '#/components/schemas/CreateTag'
+          maxItems: 50
+          minItems: 0
+          description: Open ended labels with a key value pair applied to the ad
+        creative:
+          $ref: '#/components/schemas/CreateCreative'
+      required:
+        - adGroupId
+        - adProduct
+        - creative
+        - marketplaceScope
+        - marketplaces
+        - state
+        - status
+    AdGroup:
+      type: object
+      properties:
+        status:
+          $ref: '#/components/schemas/Status'
+        adProduct:
+          $ref: '#/components/schemas/AdProduct'
+        marketplaces:
+          type: array
+          items:
+            $ref: '#/components/schemas/Marketplace'
+          maxItems: 1
+          minItems: 1
+        campaignId:
+          type: string
+          description: The unique identifier of the campaign the ad group belongs to.
+        state:
+          $ref: '#/components/schemas/States'
+        name:
+          type: string
+          description: The name of the ad group.
+        lastUpdatedDateTime:
+          type: string
+          description: The date time that the ad group was last updated.
+          format: date-time
+        marketplaceScope:
+          $ref: '#/components/schemas/MarketplaceScope'
+        bid:
+          $ref: '#/components/schemas/AdGroupBidValue'
+        adGroupId:
+          type: string
+          description: The unique identifier of the ad group.
+        tags:
+          type: array
+          items:
+            $ref: '#/components/schemas/Tag'
+          maxItems: 50
+          minItems: 0
+          description: Open ended labels with a key value pair applied to the ad group
+        creationDateTime:
+          type: string
+          description: The date time that the ad group was created.
+          format: date-time
+      required:
+        - adGroupId
+        - adProduct
+        - bid
+        - campaignId
+        - creationDateTime
+        - lastUpdatedDateTime
+        - marketplaceScope
+        - marketplaces
+        - name
+        - state
+        - status
+    AdGroupAdProductFilter:
+      type: object
+      properties:
+        include:
+          type: array
+          items:
+            $ref: '#/components/schemas/AdProduct'
+          maxItems: 1
+          minItems: 1
+      required:
+        - include
+    AdGroupBid:
+      type: object
+      properties:
+        defaultBid:
+          type: number
+          description: The default maximum bid for ads and targets in the ad group. This is used in sponsored ads as the maximum bid during the auction.
+          format: double
+        currencyCode:
+          $ref: '#/components/schemas/CurrencyCode'
+      required:
+        - currencyCode
+        - defaultBid
+    AdGroupBidValue:
+      type: object
+      properties:
+        bid:
+          $ref: '#/components/schemas/AdGroupBid'
+      required:
+        - bid
+    AdGroupCampaignIdFilter:
+      type: object
+      properties:
+        include:
+          type: array
+          items:
+            type: string
+          maxItems: 100
+          minItems: 0
+      required:
+        - include
+    AdGroupCreate:
+      type: object
+      properties:
+        adProduct:
+          $ref: '#/components/schemas/AdProduct'
+        marketplaces:
+          type: array
+          items:
+            $ref: '#/components/schemas/Marketplace'
+          maxItems: 1
+          minItems: 1
+        campaignId:
+          type: string
+          description: The unique identifier of the campaign the ad group belongs to.
+        state:
+          $ref: '#/components/schemas/CreateStates'
+        name:
+          type: string
+          description: The name of the ad group.
+        marketplaceScope:
+          $ref: '#/components/schemas/MarketplaceScope'
+        bid:
+          $ref: '#/components/schemas/CreateAdGroupBidValue'
+        tags:
+          type: array
+          items:
+            $ref: '#/components/schemas/CreateTag'
+          maxItems: 50
+          minItems: 0
+          description: Open ended labels with a key value pair applied to the ad group
+      required:
+        - adProduct
+        - bid
+        - campaignId
+        - marketplaceScope
+        - marketplaces
+        - name
+        - state
+    AdGroupMultiStatusResponse:
+      type: object
+      properties:
+        success:
+          type: array
+          items:
+            $ref: '#/components/schemas/AdGroupMultiStatusSuccess'
+          maxItems: 1000
+          minItems: 0
+        error:
+          type: array
+          items:
+            $ref: '#/components/schemas/ErrorsIndex'
+          maxItems: 1000
+          minItems: 0
+    AdGroupMultiStatusSuccess:
+      type: object
+      properties:
+        index:
+          type: integer
+          maximum: 999
+          minimum: 0
+          format: int32
+        adGroup:
+          $ref: '#/components/schemas/AdGroup'
+      required:
+        - adGroup
+        - index
+    AdGroupNameFilter:
+      type: object
+      properties:
+        queryTermMatchType:
+          $ref: '#/components/schemas/AdGroupNameFilterType'
+        include:
+          type: array
+          items:
+            type: string
+          maxItems: 100
+          minItems: 0
+      required:
+        - include
+    AdGroupNameFilterType:
+      type: string
+      enum:
+        - EXACT_MATCH
+        - BROAD_MATCH
+    AdGroupStateFilter:
+      type: object
+      properties:
+        include:
+          type: array
+          items:
+            $ref: '#/components/schemas/State'
+          maxItems: 3
+          minItems: 0
+      required:
+        - include
+    AdGroupSuccessResponse:
+      type: object
+      properties:
+        nextToken:
+          type: string
+        adGroups:
+          type: array
+          items:
+            $ref: '#/components/schemas/AdGroup'
+          maxItems: 1000
+          minItems: 0
+    AdGroupUpdate:
+      type: object
+      properties:
+        state:
+          $ref: '#/components/schemas/UpdateStates'
+        name:
+          type: string
+        bid:
+          $ref: '#/components/schemas/UpdateAdGroupBidValue'
+        adGroupId:
+          type: string
+          description: The unique identifier of the ad group.
+        tags:
+          type: array
+          items:
+            $ref: '#/components/schemas/UpdateTag'
+          maxItems: 50
+          minItems: 0
+      required:
+        - adGroupId
+    AdMultiStatusResponse:
+      type: object
+      properties:
+        success:
+          type: array
+          items:
+            $ref: '#/components/schemas/AdMultiStatusSuccess'
+          maxItems: 1000
+          minItems: 0
+        error:
+          type: array
+          items:
+            $ref: '#/components/schemas/ErrorsIndex'
+          maxItems: 1000
+          minItems: 0
+    AdMultiStatusSuccess:
+      type: object
+      properties:
+        index:
+          type: integer
+          maximum: 999
+          minimum: 0
+          format: int32
+        ad:
+          $ref: '#/components/schemas/Ad'
+      required:
+        - ad
+        - index
+    AdProduct:
+      type: string
+      enum:
+        - SPONSORED_PRODUCTS
+    AdStateFilter:
+      type: object
+      properties:
+        include:
+          type: array
+          items:
+            $ref: '#/components/schemas/State'
+          maxItems: 3
+          minItems: 0
+      required:
+        - include
+    AdSuccessResponse:
+      type: object
+      properties:
+        nextToken:
+          type: string
+        ads:
+          type: array
+          items:
+            $ref: '#/components/schemas/Ad'
+          maxItems: 1000
+          minItems: 0
+    AdType:
+      type: string
+      enum:
+        - PRODUCT_AD
+    AdUpdate:
+      type: object
+      properties:
+        status:
+          $ref: '#/components/schemas/UpdateStatus'
+        adId:
+          type: string
+          description: The identifier of the ad.
+        state:
+          $ref: '#/components/schemas/UpdateStates'
+        tags:
+          type: array
+          items:
+            $ref: '#/components/schemas/UpdateTag'
+          maxItems: 50
+          minItems: 0
+      required:
+        - adId
+    AudienceSegment:
+      type: object
+      properties:
+        audienceId:
+          type: string
+          description: This is an Audience identifier vended by Audience Discovery.
+        audienceSegmentType:
+          $ref: '#/components/schemas/AudienceSegmentType'
+      required:
+        - audienceId
+        - audienceSegmentType
+    AudienceSegmentType:
+      type: string
+      enum:
+        - SPONSORED_ADS_AMC
+    AutoCreationSettings:
+      type: object
+      properties:
+        autoCreateTargets:
+          type: boolean
+          description: Gives Amazon permission to automatically create targets associated with the campaign based on the products being advertised.
+      required:
+        - autoCreateTargets
+    BadGatewayResponseContent:
+      type: object
+      properties:
+        message:
+          type: string
+        code:
+          type: string
+      required:
+        - code
+        - message
+    BadRequestResponseContent:
+      type: object
+      properties:
+        message:
+          type: string
+        code:
+          type: string
+      required:
+        - code
+        - message
+    BidAdjustments:
+      type: object
+      properties:
+        placementBidAdjustments:
+          type: array
+          items:
+            $ref: '#/components/schemas/PlacementBidAdjustment'
+          maxItems: 3
+          minItems: 0
+          description: Bid adjustments based on ad placements.
+        shopperCohortBidAdjustments:
+          type: array
+          items:
+            $ref: '#/components/schemas/ShopperCohortBidAdjustment'
+          maxItems: 2
+          minItems: 0
+          description: Bid Adjustments based on shopper cohorts.
+    BidSettings:
+      type: object
+      properties:
+        bidStrategy:
+          $ref: '#/components/schemas/BidStrategy'
+        bidAdjustments:
+          $ref: '#/components/schemas/BidAdjustments'
+    BidStrategy:
+      type: string
+      enum:
+        - SALES_DOWN_ONLY
+        - RULE_BASED
+        - SALES
+    Budget:
+      type: object
+      properties:
+        recurrenceTimePeriod:
+          $ref: '#/components/schemas/Recurrence'
+        budgetType:
+          $ref: '#/components/schemas/BudgetType'
+        budgetValue:
+          $ref: '#/components/schemas/BudgetValue'
+      required:
+        - budgetType
+        - budgetValue
+        - recurrenceTimePeriod
+    BudgetSettings:
+      type: object
+      properties:
+        offAmazonBudgetControlStrategy:
+          $ref: '#/components/schemas/OffAmazonBudgetControlStrategy'
+    BudgetType:
+      type: string
+      enum:
+        - MONETARY
+    BudgetValue:
+      oneOf:
+        - type: object
+          title: monetaryBudgetValue
+          properties:
+            monetaryBudgetValue:
+              $ref: '#/components/schemas/MonetaryBudgetValue'
+          required:
+            - monetaryBudgetValue
+    Campaign:
+      type: object
+      properties:
+        status:
+          $ref: '#/components/schemas/Status'
+        adProduct:
+          $ref: '#/components/schemas/AdProduct'
+        marketplaces:
+          type: array
+          items:
+            $ref: '#/components/schemas/Marketplace'
+          maxItems: 1
+          minItems: 1
+        campaignId:
+          type: string
+          description: A unique identifier for a campaign.
+        endDateTime:
+          type: string
+          description: The end date time for the campaign.
+          format: date-time
+        portfolioId:
+          type: string
+          description: The ID of the portfolio associated with the campaign.
+        startDateTime:
+          type: string
+          description: The start date time for the campaign.
+          format: date-time
+        state:
+          $ref: '#/components/schemas/States'
+        name:
+          type: string
+          description: The name of the campaign.
+        autoCreationSettings:
+          $ref: '#/components/schemas/AutoCreationSettings'
+        marketplaceScope:
+          $ref: '#/components/schemas/MarketplaceScope'
+        lastUpdatedDateTime:
+          type: string
+          description: The date time that the campaign was last updated.
+          format: date-time
+        budgets:
+          type: array
+          items:
+            $ref: '#/components/schemas/Budget'
+          maxItems: 1
+          minItems: 1
+          description: The object containing budget details for the campaign (for campaigns that support multiple budgets).
+        optimizations:
+          $ref: '#/components/schemas/CampaignOptimizations'
+        tags:
+          type: array
+          items:
+            $ref: '#/components/schemas/Tag'
+          maxItems: 50
+          minItems: 0
+          description: Open ended labels with a key value pair applied to the campaign
+        creationDateTime:
+          type: string
+          description: The date time that the campaign was created.
+          format: date-time
+      required:
+        - adProduct
+        - autoCreationSettings
+        - budgets
+        - campaignId
+        - creationDateTime
+        - lastUpdatedDateTime
+        - marketplaceScope
+        - marketplaces
+        - name
+        - startDateTime
+        - state
+        - status
+    CampaignAdProductFilter:
+      type: object
+      properties:
+        include:
+          type: array
+          items:
+            $ref: '#/components/schemas/AdProduct'
+          maxItems: 1
+          minItems: 1
+      required:
+        - include
+    CampaignCreate:
+      type: object
+      properties:
+        adProduct:
+          $ref: '#/components/schemas/AdProduct'
+        marketplaces:
+          type: array
+          items:
+            $ref: '#/components/schemas/Marketplace'
+          maxItems: 1
+          minItems: 1
+        endDateTime:
+          type: string
+          description: The end date time for the campaign.
+          format: date-time
+        portfolioId:
+          type: string
+          description: The ID of the portfolio associated with the campaign.
+        startDateTime:
+          type: string
+          description: The start date time for the campaign.
+          format: date-time
+        state:
+          $ref: '#/components/schemas/CreateStates'
+        name:
+          type: string
+          description: The name of the campaign.
+        autoCreationSettings:
+          $ref: '#/components/schemas/CreateAutoCreationSettings'
+        marketplaceScope:
+          $ref: '#/components/schemas/MarketplaceScope'
+        budgets:
+          type: array
+          items:
+            $ref: '#/components/schemas/CreateBudget'
+          maxItems: 1
+          minItems: 1
+          description: The object containing budget details for the campaign (for campaigns that support multiple budgets).
+        optimizations:
+          $ref: '#/components/schemas/CreateCampaignOptimizations'
+        tags:
+          type: array
+          items:
+            $ref: '#/components/schemas/CreateTag'
+          maxItems: 50
+          minItems: 0
+          description: Open ended labels with a key value pair applied to the campaign
+      required:
+        - adProduct
+        - autoCreationSettings
+        - budgets
+        - marketplaceScope
+        - marketplaces
+        - name
+        - startDateTime
+        - state
+    CampaignMarketplaceScopeFilter:
+      type: object
+      properties:
+        include:
+          type: array
+          items:
+            $ref: '#/components/schemas/MarketplaceScope'
+          maxItems: 1
+          minItems: 0
+      required:
+        - include
+    CampaignMultiStatusResponse:
+      type: object
+      properties:
+        success:
+          type: array
+          items:
+            $ref: '#/components/schemas/CampaignMultiStatusSuccess'
+          maxItems: 1000
+          minItems: 0
+        error:
+          type: array
+          items:
+            $ref: '#/components/schemas/ErrorsIndex'
+          maxItems: 1000
+          minItems: 0
+    CampaignMultiStatusSuccess:
+      type: object
+      properties:
+        index:
+          type: integer
+          maximum: 999
+          minimum: 0
+          format: int32
+        campaign:
+          $ref: '#/components/schemas/Campaign'
+      required:
+        - campaign
+        - index
+    CampaignNameFilter:
+      type: object
+      properties:
+        queryTermMatchType:
+          $ref: '#/components/schemas/CampaignNameFilterType'
+        include:
+          type: array
+          items:
+            type: string
+          maxItems: 100
+          minItems: 0
+      required:
+        - include
+    CampaignNameFilterType:
+      type: string
+      enum:
+        - EXACT_MATCH
+        - BROAD_MATCH
+    CampaignOptimizations:
+      type: object
+      properties:
+        bidSettings:
+          $ref: '#/components/schemas/BidSettings'
+        budgetSettings:
+          $ref: '#/components/schemas/BudgetSettings'
+    CampaignPortfolioIdFilter:
+      type: object
+      properties:
+        include:
+          type: array
+          items:
+            type: string
+          maxItems: 100
+          minItems: 0
+      required:
+        - include
+    CampaignStateFilter:
+      type: object
+      properties:
+        include:
+          type: array
+          items:
+            $ref: '#/components/schemas/State'
+          maxItems: 3
+          minItems: 0
+      required:
+        - include
+    CampaignSuccessResponse:
+      type: object
+      properties:
+        nextToken:
+          type: string
+        campaigns:
+          type: array
+          items:
+            $ref: '#/components/schemas/Campaign'
+          maxItems: 5000
+          minItems: 0
+    CampaignUpdate:
+      type: object
+      properties:
+        campaignId:
+          type: string
+          description: A unique identifier for a campaign.
+        endDateTime:
+          type: string
+          format: date-time
+        portfolioId:
+          type: string
+        startDateTime:
+          type: string
+          format: date-time
+        state:
+          $ref: '#/components/schemas/UpdateStates'
+        name:
+          type: string
+        budgets:
+          type: array
+          items:
+            $ref: '#/components/schemas/UpdateBudget'
+          maxItems: 1
+          minItems: 1
+        optimizations:
+          $ref: '#/components/schemas/UpdateCampaignOptimizations'
+        tags:
+          type: array
+          items:
+            $ref: '#/components/schemas/UpdateTag'
+          maxItems: 50
+          minItems: 0
+      required:
+        - campaignId
+    ContentTooLargeResponseContent:
+      type: object
+      properties:
+        message:
+          type: string
+        code:
+          type: string
+      required:
+        - code
+        - message
+    CreateAdGroupBid:
+      type: object
+      properties:
+        defaultBid:
+          type: number
+          description: The default maximum bid for ads and targets in the ad group. This is used in sponsored ads as the maximum bid during the auction.
+          format: double
+      required:
+        - defaultBid
+    CreateAdGroupBidValue:
+      type: object
+      properties:
+        bid:
+          $ref: '#/components/schemas/CreateAdGroupBid'
+      required:
+        - bid
+    CreateAdGroupRequest:
+      type: object
+      properties:
+        adGroups:
+          type: array
+          items:
+            $ref: '#/components/schemas/AdGroupCreate'
+          maxItems: 1000
+          minItems: 1
+    CreateAdRequest:
+      type: object
+      properties:
+        ads:
+          type: array
+          items:
+            $ref: '#/components/schemas/AdCreate'
+          maxItems: 1000
+          minItems: 1
+    CreateAudienceSegment:
+      type: object
+      properties:
+        audienceId:
+          type: string
+          description: This is an Audience identifier vended by Audience Discovery.
+        audienceSegmentType:
+          $ref: '#/components/schemas/AudienceSegmentType'
+      required:
+        - audienceId
+        - audienceSegmentType
+    CreateAutoCreationSettings:
+      type: object
+      properties:
+        autoCreateTargets:
+          type: boolean
+          description: Gives Amazon permission to automatically create targets associated with the campaign based on the products being advertised.
+      required:
+        - autoCreateTargets
+    CreateBidAdjustments:
+      type: object
+      properties:
+        placementBidAdjustments:
+          type: array
+          items:
+            $ref: '#/components/schemas/CreatePlacementBidAdjustment'
+          maxItems: 3
+          minItems: 0
+          description: Bid adjustments based on ad placements.
+        shopperCohortBidAdjustments:
+          type: array
+          items:
+            $ref: '#/components/schemas/CreateShopperCohortBidAdjustment'
+          maxItems: 2
+          minItems: 0
+          description: Bid Adjustments based on shopper cohorts.
+    CreateBidSettings:
+      type: object
+      properties:
+        bidStrategy:
+          $ref: '#/components/schemas/BidStrategy'
+        bidAdjustments:
+          $ref: '#/components/schemas/CreateBidAdjustments'
+    CreateBudget:
+      type: object
+      properties:
+        recurrenceTimePeriod:
+          $ref: '#/components/schemas/Recurrence'
+        budgetType:
+          $ref: '#/components/schemas/BudgetType'
+        budgetValue:
+          $ref: '#/components/schemas/CreateBudgetValue'
+      required:
+        - budgetType
+        - budgetValue
+        - recurrenceTimePeriod
+    CreateBudgetSettings:
+      type: object
+      properties:
+        offAmazonBudgetControlStrategy:
+          $ref: '#/components/schemas/OffAmazonBudgetControlStrategy'
+    CreateBudgetValue:
+      oneOf:
+        - type: object
+          title: monetaryBudgetValue
+          properties:
+            monetaryBudgetValue:
+              $ref: '#/components/schemas/CreateMonetaryBudgetValue'
+          required:
+            - monetaryBudgetValue
+    CreateCampaignOptimizations:
+      type: object
+      properties:
+        bidSettings:
+          $ref: '#/components/schemas/CreateBidSettings'
+        budgetSettings:
+          $ref: '#/components/schemas/CreateBudgetSettings'
+    CreateCampaignRequest:
+      type: object
+      properties:
+        campaigns:
+          type: array
+          items:
+            $ref: '#/components/schemas/CampaignCreate'
+          maxItems: 1000
+          minItems: 1
+    CreateCreative:
+      oneOf:
+        - type: object
+          title: productAdCreative
+          properties:
+            productAdCreative:
+              $ref: '#/components/schemas/CreateProductAdCreative'
+          required:
+            - productAdCreative
+    CreateKeywordTarget:
+      type: object
+      description: Targets a specific customer search term.
+      properties:
+        matchType:
+          $ref: '#/components/schemas/KeywordMatchType'
+        nativeLanguageLocale:
+          $ref: '#/components/schemas/LanguageLocale'
+        keyword:
+          $ref: '#/components/schemas/CreateKeywordValue'
+      required:
+        - keyword
+        - matchType
+    CreateKeywordValue:
+      type: object
+      properties:
+        keyword:
+          type: string
+          description: 'The customer search term or text to target. The keyword value should always be provided, either here or in the marketplace settings'
+        nativeLanguageKeyword:
+          type: string
+          description: The unlocalized keyword text in the preferred locale of the advertiser.
+      required:
+        - keyword
+    CreateMonetaryBudget:
+      type: object
+      properties:
+        value:
+          type: number
+          description: The monetary amount of the budget cap in the given currency.
+          format: double
+      required:
+        - value
+    CreateMonetaryBudgetValue:
+      type: object
+      properties:
+        monetaryBudget:
+          $ref: '#/components/schemas/CreateMonetaryBudget'
+      required:
+        - monetaryBudget
+    CreatePlacementBidAdjustment:
+      type: object
+      properties:
+        percentage:
+          type: integer
+          description: The selection of the percentage change associated with a given placement and bid adjustment settings.
+          format: int32
+        placement:
+          $ref: '#/components/schemas/Placement'
+      required:
+        - percentage
+        - placement
+    CreateProductAdCreative:
+      type: object
+      description: An ad with a creative built based on the product being advertised.
+      properties:
+        productIdType:
+          $ref: '#/components/schemas/ProductIdType'
+        productAdProperties:
+          $ref: '#/components/schemas/CreateProductAdPropertiesValue'
+      required:
+        - productAdProperties
+        - productIdType
+    CreateProductAdPropertiesValue:
+      type: object
+      properties:
+        productId:
+          type: string
+          description: The identifier of the product advertised in the creative. The product id should always be specified either here or in the marketplace settings
+        headline:
+          type: string
+          description: The headline associated with the ad creative.
+      required:
+        - productId
+    CreateProductCategoryRefinement:
+      type: object
+      properties:
+        productPriceLessThan:
+          type: number
+          description: Refinement to target products with a price less than the value within the product category.
+          format: double
+        productAgeRangeId:
+          type: string
+          description: The age range ID to target.
+        productRatingGreaterThan:
+          type: number
+          description: Refinement to target products with a rating greater than the value within the product category.
+          format: double
+        productBrandId:
+          type: string
+          description: The brand ID to target.
+        productRatingLessThan:
+          type: number
+          description: Refinement to target products with a rating less than the value within the product category.
+          format: double
+        productPriceGreaterThan:
+          type: number
+          description: Refinement to target products with a price greater than the value within the product category.
+          format: double
+        productCategoryId:
+          type: string
+          description: The product category ID to target.
+        productPrimeShippingEligible:
+          type: boolean
+          description: Target based on if a product is Prime-shipping eligible.
+    CreateProductCategoryRefinementValue:
+      type: object
+      properties:
+        productCategoryRefinement:
+          $ref: '#/components/schemas/CreateProductCategoryRefinement'
+      required:
+        - productCategoryRefinement
+    CreateProductCategoryTarget:
+      type: object
+      description: Targets a specific customer search term.
+      properties:
+        productCategoryRefinement:
+          $ref: '#/components/schemas/CreateProductCategoryRefinementValue'
+        productGenreRefinement:
+          $ref: '#/components/schemas/CreateProductGenreRefinement'
+      required:
+        - productCategoryRefinement
+    CreateProductGenreRefinement:
+      type: object
+      properties:
+        productGenreId:
+          type: string
+          description: The product genre ID to target.
+      required:
+        - productGenreId
+    CreateProductTarget:
+      type: object
+      description: Targets a specific product.
+      properties:
+        productIdType:
+          $ref: '#/components/schemas/ProductIdType'
+        matchType:
+          $ref: '#/components/schemas/ProductMatchType'
+        product:
+          $ref: '#/components/schemas/CreateProductValue'
+      required:
+        - matchType
+        - product
+        - productIdType
+    CreateProductValue:
+      type: object
+      properties:
+        productId:
+          type: string
+          description: The product identifier. Either the product id or the marketplace settings should always be specified
+      required:
+        - productId
+    CreateShopperCohortBidAdjustment:
+      type: object
+      properties:
+        percentage:
+          type: integer
+          description: The selection of the percentage change associated with a given shopper cohort and bid adjustment settings.
+          format: int32
+        shopperCohortType:
+          $ref: '#/components/schemas/ShopperCohortType'
+        audienceSegments:
+          type: array
+          items:
+            $ref: '#/components/schemas/CreateAudienceSegment'
+          maxItems: 2
+          minItems: 1
+          description: Audience segments associated with bid adjustment settings. Required when AUDIENCE_SEGMENT is used for shopperCohortType.
+      required:
+        - audienceSegments
+        - percentage
+        - shopperCohortType
+    CreateStates:
+      type: object
+      properties:
+        state:
+          $ref: '#/components/schemas/State'
+      required:
+        - state
+    CreateStatus:
+      type: object
+    CreateTag:
+      type: object
+      properties:
+        key:
+          type: string
+          description: A custom key value pair entered by the advertiser.
+        value:
+          type: string
+          description: A custom key value pair entered by the advertiser.
+      required:
+        - key
+        - value
+    CreateTargetBid:
+      type: object
+      properties:
+        bid:
+          type: number
+          description: The maximum bid for a target.
+          format: double
+      required:
+        - bid
+    CreateTargetBidValue:
+      type: object
+      properties:
+        bid:
+          $ref: '#/components/schemas/CreateTargetBid'
+    CreateTargetDetails:
+      oneOf:
+        - type: object
+          title: productTarget
+          properties:
+            productTarget:
+              $ref: '#/components/schemas/CreateProductTarget'
+          required:
+            - productTarget
+        - type: object
+          title: keywordTarget
+          properties:
+            keywordTarget:
+              $ref: '#/components/schemas/CreateKeywordTarget'
+          required:
+            - keywordTarget
+        - type: object
+          title: themeTarget
+          properties:
+            themeTarget:
+              $ref: '#/components/schemas/CreateThemeTarget'
+          required:
+            - themeTarget
+        - type: object
+          title: productCategoryTarget
+          properties:
+            productCategoryTarget:
+              $ref: '#/components/schemas/CreateProductCategoryTarget'
+          required:
+            - productCategoryTarget
+    CreateTargetRequest:
+      type: object
+      properties:
+        targets:
+          type: array
+          items:
+            $ref: '#/components/schemas/TargetCreate'
+          maxItems: 1000
+          minItems: 1
+    CreateThemeTarget:
+      type: object
+      description: Theme targets let advertisers select high-performing targets based on a common theme.
+      properties:
+        matchType:
+          $ref: '#/components/schemas/ThemeMatchType'
+      required:
+        - matchType
+    Creative:
+      oneOf:
+        - type: object
+          title: productAdCreative
+          properties:
+            productAdCreative:
+              $ref: '#/components/schemas/ProductAdCreative'
+          required:
+            - productAdCreative
+    CurrencyCode:
+      type: string
+      enum:
+        - MXP
+        - BRL
+        - NZD
+        - AUD
+        - CAD
+        - CHF
+        - TRY
+        - CNY
+        - EUR
+        - NOK
+        - USD
+        - INR
+        - JPY
+        - PLN
+        - MXN
+        - SGD
+        - EGP
+        - DKK
+        - NGN
+        - GBP
+        - AED
+        - ZAR
+        - SAR
+        - SEK
+    DeleteAdGroupRequest:
+      type: object
+      properties:
+        adGroupIds:
+          type: array
+          items:
+            type: string
+          maxItems: 1000
+          minItems: 1
+    DeleteAdRequest:
+      type: object
+      properties:
+        adIds:
+          type: array
+          items:
+            type: string
+          maxItems: 1000
+          minItems: 1
+    DeleteCampaignRequest:
+      type: object
+      properties:
+        campaignIds:
+          type: array
+          items:
+            type: string
+          maxItems: 1000
+          minItems: 1
+    DeleteTargetRequest:
+      type: object
+      properties:
+        targetIds:
+          type: array
+          items:
+            type: string
+          maxItems: 1000
+          minItems: 1
+    DeliveryReason:
+      type: string
+      enum:
+        - MODERATION_CONTENT_PROVOCATIVE_POLICY_VIOLATION
+        - OTHER
+        - TARGET_BLOCKED
+        - AD_CREATION_IN_PROGRESS
+        - BRAND_INELIGIBLE
+        - CAMPAIGN_REJECTED
+        - SECURITY_SCAN_PENDING_REVIEW
+        - NOT_IN_POLICY
+        - MODERATION_ADULT_SOFTLINES_POLICY_VIOLATION
+        - PORTFOLIO_PAUSED
+        - MODERATION_CONTENT_NUDITY_POLICY_VIOLATION
+        - CAMPAIGN_ARCHIVED
+        - MODERATION_GRAPHICAL_SEXUAL_IMAGES_POLICY_VIOLATION
+        - ADVERTISER_OUT_OF_BUDGET
+        - CREATIVE_REJECTED
+        - MODERATION_LANGUAGE_OFFENSIVE_POLICY_VIOLATION
+        - CAMPAIGN_PENDING_REVIEW
+        - OUT_OF_REWARD_BUDGET
+        - AD_GROUP_INCOMPLETE
+        - MODERATION_CLAIM_WEIGHTLOSS_POLICY_VIOLATION
+        - AD_INELIGIBLE
+        - MODERATION_ERROR_404
+        - CREATIVE_PENDING_REVIEW
+        - AD_POLICING_PENDING_REVIEW
+        - AD_MISSING_DECORATION
+        - AD_CREATION_FAILED
+        - MODERATION_ADULT_NOVELTY_POLICY_VIOLATION
+        - AD_PAUSED
+        - SECURITY_SCAN_REJECTED
+        - ADVERTISER_ARCHIVED
+        - PORTFOLIO_ARCHIVED
+        - SPEND_LIMIT_EXCEEDED
+        - AD_NOT_DELIVERING
+        - AD_GROUP_LOW_BID
+        - ADVERTISER_POLICING_PENDING_REVIEW
+        - AD_GROUP_ARCHIVED
+        - NOT_IN_BUYBOX
+        - CAMPAIGN_PENDING_START_DATE
+        - LANDING_PAGE_INELIGIBLE
+        - TARGET_POLICING_SUSPENDED
+        - AD_GROUP_POLICING_PENDING_REVIEW
+        - ADVERTISER_PAUSED
+        - MODERATION_CONTENT_SMOKING_POLICY_VIOLATION
+        - ADVERTISER_PAYMENT_FAILURE
+        - AD_ARCHIVED
+        - AD_MISSING_IMAGE
+        - TARGET_PAUSED
+        - PORTFOLIO_END_DATE_REACHED
+        - MODERATION_CRITICAL_EVENTS_POLICY_VIOLATION
+        - ADVERTISER_POLICING_SUSPENDED
+        - CAMPAIGN_END_DATE_REACHED
+        - NO_INVENTORY
+        - CAMPAIGN_INCOMPLETE
+        - OUT_OF_STOCK
+        - MODERATION_NOT_COMPLIANT_TO_AD_POLICY
+        - PORTFOLIO_OUT_OF_BUDGET
+        - MODERATION_HFSS_PRODUCT_POLICY_VIOLATION
+        - STATUS_UNAVAILABLE
+        - MODERATION_SMOKING_RELATED_POLICY_VIOLATION
+        - CAMPAIGN_OUT_OF_BUDGET
+        - AD_GROUP_PENDING_REVIEW
+        - AD_GROUP_REJECTED
+        - NO_PURCHASABLE_OFFER
+        - AD_GROUP_PAUSED
+        - NOT_BUYABLE
+        - PORTFOLIO_PENDING_START_DATE
+        - CAMPAIGN_PAUSED
+        - PIR_RULE_EXCLUDED
+        - MODERATION_ADULT_PRODUCT_POLICY_VIOLATION
+        - LANDING_PAGE_NOT_AVAILABLE
+        - CREATIVE_MISSING_ASSET
+        - TARGET_ARCHIVED
+        - ADVERTISER_OUT_OF_PREPAY_BALANCE
+        - AD_POLICING_SUSPENDED
+    DeliveryStatus:
+      type: string
+      enum:
+        - DELIVERING
+        - NOT_DELIVERING
+        - UNAVAILABLE
+    Error:
+      type: object
+      properties:
+        marketplace:
+          $ref: '#/components/schemas/ErrorMarketplace'
+        message:
+          type: string
+        code:
+          $ref: '#/components/schemas/ErrorCode'
+        fieldLocation:
+          type: string
+      required:
+        - code
+        - message
+    ErrorCode:
+      type: string
+      enum:
+        - TOO_MANY_REQUESTS
+        - UNAUTHORIZED
+        - BAD_REQUEST
+        - CONTENT_TOO_LARGE
+        - NOT_FOUND
+        - INTERNAL_ERROR
+        - FORBIDDEN
+    ErrorMarketplace:
+      type: string
+      enum:
+        - DE
+        - EG
+        - BE
+        - AE
+        - IN
+        - JP
+        - MX
+        - IT
+        - FR
+        - ES
+        - SA
+        - BR
+        - SE
+        - AU
+        - SG
+        - GB
+        - PL
+        - NL
+        - US
+        - CA
+        - TR
+    ErrorsIndex:
+      type: object
+      properties:
+        index:
+          type: integer
+          maximum: 999
+          minimum: 0
+          format: int32
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/Error'
+          maxItems: 20
+          minItems: 1
+      required:
+        - errors
+        - index
+    ForbiddenResponseContent:
+      type: object
+      properties:
+        message:
+          type: string
+        code:
+          type: string
+      required:
+        - code
+        - message
+    GatewayTimeoutResponseContent:
+      type: object
+      properties:
+        message:
+          type: string
+        code:
+          type: string
+      required:
+        - code
+        - message
+    InternalServerErrorResponseContent:
+      type: object
+      properties:
+        message:
+          type: string
+        code:
+          type: string
+      required:
+        - code
+        - message
+    KeywordMatchType:
+      type: string
+      enum:
+        - EXACT
+        - PHRASE
+        - BROAD
+    KeywordTarget:
+      type: object
+      description: Targets a specific customer search term.
+      properties:
+        matchType:
+          $ref: '#/components/schemas/KeywordMatchType'
+        nativeLanguageLocale:
+          $ref: '#/components/schemas/LanguageLocale'
+        keyword:
+          $ref: '#/components/schemas/KeywordValue'
+      required:
+        - keyword
+        - matchType
+    KeywordValue:
+      type: object
+      properties:
+        keyword:
+          type: string
+          description: 'The customer search term or text to target. The keyword value should always be provided, either here or in the marketplace settings'
+        nativeLanguageKeyword:
+          type: string
+          description: The unlocalized keyword text in the preferred locale of the advertiser.
+      required:
+        - keyword
+    LanguageLocale:
+      type: string
+      description: A combination of ISO-639 standard for language code and ISO-3166 for country code.
+      enum:
+        - zh_CN
+        - en_GB
+    Marketplace:
+      type: string
+      description: A list of country codes representing Amazon marketplaces
+      enum:
+        - BR
+        - AU
+        - NL
+        - SG
+        - ES
+        - SA
+        - EG
+        - GB
+        - SE
+        - BE
+        - MX
+        - PL
+        - IT
+        - JP
+        - US
+        - IN
+        - AE
+        - FR
+        - CA
+        - TR
+        - DE
+    MarketplaceScope:
+      type: string
+      enum:
+        - SINGLE_MARKETPLACE
+    MatchType:
+      type: string
+      enum:
+        - KEYWORDS_CLOSE_MATCH
+        - KEYWORDS_LOOSE_MATCH
+        - KEYWORDS_RELATED_TO_PRIME_DAY
+        - KEYWORDS_RELATED_TO_GIFTS
+        - KEYWORDS_RELATED_TO_YOUR_BRAND
+        - PRODUCT_COMPLEMENTS
+        - PRODUCT_SUBSTITUTES
+        - KEYWORDS_RELATED_TO_YOUR_PRODUCT_CATEGORY
+        - PRODUCT_EXACT
+        - PRODUCT_SIMILAR
+        - EXACT
+        - PHRASE
+        - BROAD
+    MonetaryBudget:
+      type: object
+      properties:
+        currencyCode:
+          $ref: '#/components/schemas/CurrencyCode'
+        value:
+          type: number
+          description: The monetary amount of the budget cap in the given currency.
+          format: double
+        ruleValue:
+          type: number
+          description: The monetary amount of the budget when a budget rule is applied.
+          format: double
+      required:
+        - currencyCode
+        - value
+    MonetaryBudgetValue:
+      type: object
+      properties:
+        monetaryBudget:
+          $ref: '#/components/schemas/MonetaryBudget'
+      required:
+        - monetaryBudget
+    NotFoundResponseContent:
+      type: object
+      properties:
+        message:
+          type: string
+        code:
+          type: string
+      required:
+        - code
+        - message
+    OffAmazonBudgetControlStrategy:
+      type: string
+      enum:
+        - MAXIMIZE_REACH
+        - MINIMIZE_SPEND
+    Placement:
+      type: string
+      enum:
+        - REST_OF_SEARCH
+        - SITE_AMAZON_BUSINESS
+        - PRODUCT_PAGE
+        - TOP_OF_SEARCH
+    PlacementBidAdjustment:
+      type: object
+      properties:
+        percentage:
+          type: integer
+          description: The selection of the percentage change associated with a given placement and bid adjustment settings.
+          format: int32
+        placement:
+          $ref: '#/components/schemas/Placement'
+      required:
+        - percentage
+        - placement
+    ProductAdCreative:
+      type: object
+      description: An ad with a creative built based on the product being advertised.
+      properties:
+        productIdType:
+          $ref: '#/components/schemas/ProductIdType'
+        productAdProperties:
+          $ref: '#/components/schemas/ProductAdPropertiesValue'
+      required:
+        - productAdProperties
+        - productIdType
+    ProductAdPropertiesValue:
+      type: object
+      properties:
+        productId:
+          type: string
+          description: The identifier of the product advertised in the creative. The product id should always be specified either here or in the marketplace settings
+        headline:
+          type: string
+          description: The headline associated with the ad creative.
+      required:
+        - productId
+    ProductCategoryRefinement:
+      type: object
+      properties:
+        productPriceLessThan:
+          type: number
+          description: Refinement to target products with a price less than the value within the product category.
+          format: double
+        productBrandIdResolved:
+          type: string
+          description: The resolved name of the brand.
+        productAgeRangeId:
+          type: string
+          description: The age range ID to target.
+        productRatingGreaterThan:
+          type: number
+          description: Refinement to target products with a rating greater than the value within the product category.
+          format: double
+        productCategoryIdResolved:
+          type: string
+          description: The resolved product category.
+        productBrandId:
+          type: string
+          description: The brand ID to target.
+        productRatingLessThan:
+          type: number
+          description: Refinement to target products with a rating less than the value within the product category.
+          format: double
+        productAgeRangeIdResolved:
+          type: string
+          description: The resolved age range to target.
+        productPriceGreaterThan:
+          type: number
+          description: Refinement to target products with a price greater than the value within the product category.
+          format: double
+        productCategoryId:
+          type: string
+          description: The product category ID to target.
+        productPrimeShippingEligible:
+          type: boolean
+          description: Target based on if a product is Prime-shipping eligible.
+    ProductCategoryRefinementValue:
+      type: object
+      properties:
+        productCategoryRefinement:
+          $ref: '#/components/schemas/ProductCategoryRefinement'
+      required:
+        - productCategoryRefinement
+    ProductCategoryTarget:
+      type: object
+      description: Targets a specific customer search term.
+      properties:
+        productCategoryRefinement:
+          $ref: '#/components/schemas/ProductCategoryRefinementValue'
+        productGenreRefinement:
+          $ref: '#/components/schemas/ProductGenreRefinement'
+      required:
+        - productCategoryRefinement
+    ProductGenreRefinement:
+      type: object
+      properties:
+        productGenreId:
+          type: string
+          description: The product genre ID to target.
+        productGenreIdResolved:
+          type: string
+          description: The resolved product genre to target.
+      required:
+        - productGenreId
+    ProductIdType:
+      type: string
+      enum:
+        - ASIN
+        - SKU
+    ProductMatchType:
+      type: string
+      enum:
+        - PRODUCT_EXACT
+        - PRODUCT_SIMILAR
+    ProductTarget:
+      type: object
+      description: Targets a specific product.
+      properties:
+        productIdType:
+          $ref: '#/components/schemas/ProductIdType'
+        matchType:
+          $ref: '#/components/schemas/ProductMatchType'
+        product:
+          $ref: '#/components/schemas/ProductValue'
+      required:
+        - matchType
+        - product
+        - productIdType
+    ProductValue:
+      type: object
+      properties:
+        productId:
+          type: string
+          description: The product identifier. Either the product id or the marketplace settings should always be specified
+      required:
+        - productId
+    QueryAdGroupRequest:
+      type: object
+      properties:
+        adProductFilter:
+          $ref: '#/components/schemas/AdGroupAdProductFilter'
+        campaignIdFilter:
+          $ref: '#/components/schemas/AdGroupCampaignIdFilter'
+        stateFilter:
+          $ref: '#/components/schemas/AdGroupStateFilter'
+        nameFilter:
+          $ref: '#/components/schemas/AdGroupNameFilter'
+        nextToken:
+          type: string
+        maxResults:
+          type: integer
+          default: 1000
+          maximum: 1000
+          minimum: 0
+          format: int32
+    QueryAdRequest:
+      type: object
+      properties:
+        adProductFilter:
+          $ref: '#/components/schemas/AdAdProductFilter'
+        stateFilter:
+          $ref: '#/components/schemas/AdStateFilter'
+        adGroupIdFilter:
+          $ref: '#/components/schemas/AdAdGroupIdFilter'
+        nextToken:
+          type: string
+        maxResults:
+          type: integer
+          default: 1000
+          maximum: 1000
+          minimum: 0
+          format: int32
+    QueryCampaignRequest:
+      type: object
+      properties:
+        adProductFilter:
+          $ref: '#/components/schemas/CampaignAdProductFilter'
+        stateFilter:
+          $ref: '#/components/schemas/CampaignStateFilter'
+        portfolioIdFilter:
+          $ref: '#/components/schemas/CampaignPortfolioIdFilter'
+        nameFilter:
+          $ref: '#/components/schemas/CampaignNameFilter'
+        marketplaceScopeFilter:
+          $ref: '#/components/schemas/CampaignMarketplaceScopeFilter'
+        nextToken:
+          type: string
+        maxResults:
+          type: integer
+          default: 5000
+          maximum: 5000
+          minimum: 0
+          format: int32
+    QueryTargetRequest:
+      type: object
+      properties:
+        adProductFilter:
+          $ref: '#/components/schemas/TargetAdProductFilter'
+        keywordFilter:
+          $ref: '#/components/schemas/TargetKeywordFilter'
+        negativeFilter:
+          $ref: '#/components/schemas/TargetNegativeFilter'
+        matchTypeFilter:
+          $ref: '#/components/schemas/TargetMatchTypeFilter'
+        campaignIdFilter:
+          $ref: '#/components/schemas/TargetCampaignIdFilter'
+        stateFilter:
+          $ref: '#/components/schemas/TargetStateFilter'
+        targetTypeFilter:
+          $ref: '#/components/schemas/TargetTargetTypeFilter'
+        productIdFilter:
+          $ref: '#/components/schemas/TargetProductIdFilter'
+        adGroupIdFilter:
+          $ref: '#/components/schemas/TargetAdGroupIdFilter'
+        targetIdFilter:
+          $ref: '#/components/schemas/TargetTargetIdFilter'
+        nextToken:
+          type: string
+        maxResults:
+          type: integer
+          default: 5000
+          maximum: 5000
+          minimum: 10
+          format: int32
+    Recurrence:
+      type: string
+      enum:
+        - DAILY
+    ServiceUnavailableErrorResponseContent:
+      type: object
+      properties:
+        message:
+          type: string
+        code:
+          type: string
+      required:
+        - code
+        - message
+    ShopperCohortBidAdjustment:
+      type: object
+      properties:
+        percentage:
+          type: integer
+          description: The selection of the percentage change associated with a given shopper cohort and bid adjustment settings.
+          format: int32
+        shopperCohortType:
+          $ref: '#/components/schemas/ShopperCohortType'
+        audienceSegments:
+          type: array
+          items:
+            $ref: '#/components/schemas/AudienceSegment'
+          maxItems: 2
+          minItems: 1
+          description: Audience segments associated with bid adjustment settings. Required when AUDIENCE_SEGMENT is used for shopperCohortType.
+      required:
+        - audienceSegments
+        - percentage
+        - shopperCohortType
+    ShopperCohortType:
+      type: string
+      enum:
+        - AUDIENCE_SEGMENT
+    State:
+      type: string
+      enum:
+        - ENABLED
+        - PAUSED
+        - ARCHIVED
+    States:
+      type: object
+      properties:
+        state:
+          $ref: '#/components/schemas/State'
+      required:
+        - state
+    Status:
+      type: object
+      properties:
+        deliveryStatus:
+          $ref: '#/components/schemas/DeliveryStatus'
+        deliveryReasons:
+          type: array
+          items:
+            $ref: '#/components/schemas/DeliveryReason'
+          maxItems: 50
+          minItems: 0
+          description: This is the list of reasons behind the delivery status.
+      required:
+        - deliveryStatus
+    Tag:
+      type: object
+      properties:
+        key:
+          type: string
+          description: A custom key value pair entered by the advertiser.
+        value:
+          type: string
+          description: A custom key value pair entered by the advertiser.
+      required:
+        - key
+        - value
+    Target:
+      type: object
+      properties:
+        status:
+          $ref: '#/components/schemas/Status'
+        targetId:
+          type: string
+          description: A unique identifier for the target.
+        marketplaces:
+          type: array
+          items:
+            $ref: '#/components/schemas/Marketplace'
+          maxItems: 1
+          minItems: 1
+        adProduct:
+          $ref: '#/components/schemas/AdProduct'
+        campaignId:
+          type: string
+          description: A unique identifier for the campaign associated with the target. Only used for campaign-level targets.
+        targetType:
+          $ref: '#/components/schemas/TargetType'
+        adGroupId:
+          type: string
+          description: A unique identifier for the ad group associated with the target. Only used for ad-group level targets.
+        negative:
+          type: boolean
+          description: Indicates whether the target is negative or not.
+        state:
+          $ref: '#/components/schemas/States'
+        lastUpdatedDateTime:
+          type: string
+          description: The date time the target was last updated.
+          format: date-time
+        marketplaceScope:
+          $ref: '#/components/schemas/MarketplaceScope'
+        bid:
+          $ref: '#/components/schemas/TargetBidValue'
+        targetDetails:
+          $ref: '#/components/schemas/TargetDetails'
+        tags:
+          type: array
+          items:
+            $ref: '#/components/schemas/Tag'
+          maxItems: 50
+          minItems: 0
+          description: Open ended labels with a key value pair applied to the target
+        targetLevel:
+          $ref: '#/components/schemas/TargetLevel'
+        creationDateTime:
+          type: string
+          description: The date time the target was created.
+          format: date-time
+      required:
+        - adProduct
+        - creationDateTime
+        - lastUpdatedDateTime
+        - marketplaceScope
+        - marketplaces
+        - negative
+        - state
+        - status
+        - targetDetails
+        - targetId
+        - targetLevel
+        - targetType
+    TargetAdGroupIdFilter:
+      type: object
+      properties:
+        include:
+          type: array
+          items:
+            type: string
+          maxItems: 100
+          minItems: 0
+      required:
+        - include
+    TargetAdProductFilter:
+      type: object
+      properties:
+        include:
+          type: array
+          items:
+            $ref: '#/components/schemas/AdProduct'
+          maxItems: 1
+          minItems: 1
+      required:
+        - include
+    TargetBid:
+      type: object
+      properties:
+        bid:
+          type: number
+          description: The maximum bid for a target.
+          format: double
+        currencyCode:
+          $ref: '#/components/schemas/CurrencyCode'
+      required:
+        - bid
+        - currencyCode
+    TargetBidValue:
+      type: object
+      properties:
+        bid:
+          $ref: '#/components/schemas/TargetBid'
+    TargetCampaignIdFilter:
+      type: object
+      properties:
+        include:
+          type: array
+          items:
+            type: string
+          maxItems: 100
+          minItems: 0
+      required:
+        - include
+    TargetCreate:
+      type: object
+      properties:
+        marketplaces:
+          type: array
+          items:
+            $ref: '#/components/schemas/Marketplace'
+          maxItems: 1
+          minItems: 1
+        adProduct:
+          $ref: '#/components/schemas/AdProduct'
+        campaignId:
+          type: string
+          description: A unique identifier for the campaign associated with the target. Only used for campaign-level targets.
+        targetType:
+          $ref: '#/components/schemas/TargetType'
+        adGroupId:
+          type: string
+          description: A unique identifier for the ad group associated with the target. Only used for ad-group level targets.
+        negative:
+          type: boolean
+          description: Indicates whether the target is negative or not.
+        state:
+          $ref: '#/components/schemas/CreateStates'
+        marketplaceScope:
+          $ref: '#/components/schemas/MarketplaceScope'
+        bid:
+          $ref: '#/components/schemas/CreateTargetBidValue'
+        targetDetails:
+          $ref: '#/components/schemas/CreateTargetDetails'
+        tags:
+          type: array
+          items:
+            $ref: '#/components/schemas/CreateTag'
+          maxItems: 50
+          minItems: 0
+          description: Open ended labels with a key value pair applied to the target
+      required:
+        - adProduct
+        - marketplaceScope
+        - marketplaces
+        - negative
+        - state
+        - targetDetails
+        - targetType
+    TargetDetails:
+      oneOf:
+        - type: object
+          title: keywordTarget
+          properties:
+            keywordTarget:
+              $ref: '#/components/schemas/KeywordTarget'
+          required:
+            - keywordTarget
+        - type: object
+          title: themeTarget
+          properties:
+            themeTarget:
+              $ref: '#/components/schemas/ThemeTarget'
+          required:
+            - themeTarget
+        - type: object
+          title: productTarget
+          properties:
+            productTarget:
+              $ref: '#/components/schemas/ProductTarget'
+          required:
+            - productTarget
+        - type: object
+          title: productCategoryTarget
+          properties:
+            productCategoryTarget:
+              $ref: '#/components/schemas/ProductCategoryTarget'
+          required:
+            - productCategoryTarget
+    TargetKeywordFilter:
+      type: object
+      properties:
+        queryTermMatchType:
+          $ref: '#/components/schemas/TargetKeywordFilterType'
+        include:
+          type: array
+          items:
+            type: string
+          maxItems: 100
+          minItems: 0
+      required:
+        - include
+    TargetKeywordFilterType:
+      type: string
+      enum:
+        - EXACT_MATCH
+        - BROAD_MATCH
+    TargetLevel:
+      type: string
+      enum:
+        - CAMPAIGN
+        - AD_GROUP
+    TargetMatchTypeFilter:
+      type: object
+      properties:
+        include:
+          type: array
+          items:
+            $ref: '#/components/schemas/MatchType'
+          maxItems: 10
+          minItems: 0
+      required:
+        - include
+    TargetMultiStatusResponse:
+      type: object
+      properties:
+        success:
+          type: array
+          items:
+            $ref: '#/components/schemas/TargetMultiStatusSuccess'
+          maxItems: 1000
+          minItems: 0
+        error:
+          type: array
+          items:
+            $ref: '#/components/schemas/ErrorsIndex'
+          maxItems: 1000
+          minItems: 0
+    TargetMultiStatusSuccess:
+      type: object
+      properties:
+        index:
+          type: integer
+          maximum: 999
+          minimum: 0
+          format: int32
+        target:
+          $ref: '#/components/schemas/Target'
+      required:
+        - index
+        - target
+    TargetNegativeFilter:
+      type: object
+      properties:
+        include:
+          type: array
+          items:
+            type: boolean
+          maxItems: 2
+          minItems: 0
+      required:
+        - include
+    TargetProductIdFilter:
+      type: object
+      properties:
+        queryTermMatchType:
+          $ref: '#/components/schemas/TargetProductIdFilterType'
+        include:
+          type: array
+          items:
+            type: string
+          maxItems: 100
+          minItems: 0
+      required:
+        - include
+    TargetProductIdFilterType:
+      type: string
+      enum:
+        - EXACT_MATCH
+        - BROAD_MATCH
+    TargetStateFilter:
+      type: object
+      properties:
+        include:
+          type: array
+          items:
+            $ref: '#/components/schemas/State'
+          maxItems: 3
+          minItems: 0
+      required:
+        - include
+    TargetSuccessResponse:
+      type: object
+      properties:
+        nextToken:
+          type: string
+        targets:
+          type: array
+          items:
+            $ref: '#/components/schemas/Target'
+          maxItems: 5000
+          minItems: 0
+    TargetTargetIdFilter:
+      type: object
+      properties:
+        include:
+          type: array
+          items:
+            type: string
+          maxItems: 100
+          minItems: 0
+      required:
+        - include
+    TargetTargetTypeFilter:
+      type: object
+      properties:
+        include:
+          type: array
+          items:
+            $ref: '#/components/schemas/TargetType'
+          maxItems: 4
+          minItems: 0
+      required:
+        - include
+    TargetType:
+      type: string
+      enum:
+        - PRODUCT_CATEGORY
+        - PRODUCT
+        - KEYWORD
+        - THEME
+    TargetUpdate:
+      type: object
+      properties:
+        targetId:
+          type: string
+          description: A unique identifier for the target.
+        state:
+          $ref: '#/components/schemas/UpdateStates'
+        bid:
+          $ref: '#/components/schemas/UpdateTargetBidValue'
+        tags:
+          type: array
+          items:
+            $ref: '#/components/schemas/UpdateTag'
+          maxItems: 50
+          minItems: 0
+      required:
+        - targetId
+    ThemeMatchType:
+      type: string
+      enum:
+        - KEYWORDS_CLOSE_MATCH
+        - KEYWORDS_LOOSE_MATCH
+        - KEYWORDS_RELATED_TO_PRIME_DAY
+        - KEYWORDS_RELATED_TO_GIFTS
+        - KEYWORDS_RELATED_TO_YOUR_BRAND
+        - PRODUCT_COMPLEMENTS
+        - PRODUCT_SUBSTITUTES
+        - KEYWORDS_RELATED_TO_YOUR_PRODUCT_CATEGORY
+    ThemeTarget:
+      type: object
+      description: Theme targets let advertisers select high-performing targets based on a common theme.
+      properties:
+        matchType:
+          $ref: '#/components/schemas/ThemeMatchType'
+      required:
+        - matchType
+    TooManyRequestsResponseContent:
+      type: object
+      properties:
+        message:
+          type: string
+        code:
+          type: string
+      required:
+        - code
+        - message
+    UnauthorizedResponseContent:
+      type: object
+      properties:
+        message:
+          type: string
+        code:
+          type: string
+      required:
+        - code
+        - message
+    UpdateAdGroupBid:
+      type: object
+      properties:
+        defaultBid:
+          type: number
+          description: The default maximum bid for ads and targets in the ad group. This is used in sponsored ads as the maximum bid during the auction.
+          format: double
+      required:
+        - defaultBid
+    UpdateAdGroupBidValue:
+      type: object
+      properties:
+        bid:
+          $ref: '#/components/schemas/UpdateAdGroupBid'
+      required:
+        - bid
+    UpdateAdGroupRequest:
+      type: object
+      properties:
+        adGroups:
+          type: array
+          items:
+            $ref: '#/components/schemas/AdGroupUpdate'
+          maxItems: 1000
+          minItems: 1
+    UpdateAdRequest:
+      type: object
+      properties:
+        ads:
+          type: array
+          items:
+            $ref: '#/components/schemas/AdUpdate'
+          maxItems: 1000
+          minItems: 1
+    UpdateAudienceSegment:
+      type: object
+      properties:
+        audienceId:
+          type: string
+          description: This is an Audience identifier vended by Audience Discovery.
+        audienceSegmentType:
+          $ref: '#/components/schemas/AudienceSegmentType'
+      required:
+        - audienceId
+        - audienceSegmentType
+    UpdateBidAdjustments:
+      type: object
+      properties:
+        placementBidAdjustments:
+          type: array
+          items:
+            $ref: '#/components/schemas/UpdatePlacementBidAdjustment'
+          maxItems: 3
+          minItems: 0
+          description: Bid adjustments based on ad placements.
+        shopperCohortBidAdjustments:
+          type: array
+          items:
+            $ref: '#/components/schemas/UpdateShopperCohortBidAdjustment'
+          maxItems: 2
+          minItems: 0
+          description: Bid Adjustments based on shopper cohorts.
+    UpdateBidSettings:
+      type: object
+      properties:
+        bidStrategy:
+          $ref: '#/components/schemas/BidStrategy'
+        bidAdjustments:
+          $ref: '#/components/schemas/UpdateBidAdjustments'
+    UpdateBudget:
+      type: object
+      properties:
+        budgetValue:
+          $ref: '#/components/schemas/UpdateBudgetValue'
+      required:
+        - budgetValue
+    UpdateBudgetSettings:
+      type: object
+      properties:
+        offAmazonBudgetControlStrategy:
+          $ref: '#/components/schemas/OffAmazonBudgetControlStrategy'
+    UpdateBudgetValue:
+      oneOf:
+        - type: object
+          title: monetaryBudgetValue
+          properties:
+            monetaryBudgetValue:
+              $ref: '#/components/schemas/UpdateMonetaryBudgetValue'
+          required:
+            - monetaryBudgetValue
+    UpdateCampaignOptimizations:
+      type: object
+      properties:
+        bidSettings:
+          $ref: '#/components/schemas/UpdateBidSettings'
+        budgetSettings:
+          $ref: '#/components/schemas/UpdateBudgetSettings'
+    UpdateCampaignRequest:
+      type: object
+      properties:
+        campaigns:
+          type: array
+          items:
+            $ref: '#/components/schemas/CampaignUpdate'
+          maxItems: 1000
+          minItems: 1
+    UpdateMonetaryBudget:
+      type: object
+      properties:
+        value:
+          type: number
+          description: The monetary amount of the budget cap in the given currency.
+          format: double
+      required:
+        - value
+    UpdateMonetaryBudgetValue:
+      type: object
+      properties:
+        monetaryBudget:
+          $ref: '#/components/schemas/UpdateMonetaryBudget'
+      required:
+        - monetaryBudget
+    UpdatePlacementBidAdjustment:
+      type: object
+      properties:
+        percentage:
+          type: integer
+          description: The selection of the percentage change associated with a given placement and bid adjustment settings.
+          format: int32
+        placement:
+          $ref: '#/components/schemas/Placement'
+      required:
+        - percentage
+        - placement
+    UpdateShopperCohortBidAdjustment:
+      type: object
+      properties:
+        percentage:
+          type: integer
+          description: The selection of the percentage change associated with a given shopper cohort and bid adjustment settings.
+          format: int32
+        shopperCohortType:
+          $ref: '#/components/schemas/ShopperCohortType'
+        audienceSegments:
+          type: array
+          items:
+            $ref: '#/components/schemas/UpdateAudienceSegment'
+          maxItems: 2
+          minItems: 1
+          description: Audience segments associated with bid adjustment settings. Required when AUDIENCE_SEGMENT is used for shopperCohortType.
+      required:
+        - audienceSegments
+        - percentage
+        - shopperCohortType
+    UpdateStates:
+      type: object
+      properties:
+        state:
+          $ref: '#/components/schemas/State'
+      required:
+        - state
+    UpdateStatus:
+      type: object
+    UpdateTag:
+      type: object
+      properties:
+        key:
+          type: string
+          description: A custom key value pair entered by the advertiser.
+        value:
+          type: string
+          description: A custom key value pair entered by the advertiser.
+      required:
+        - key
+        - value
+    UpdateTargetBid:
+      type: object
+      properties:
+        bid:
+          type: number
+          description: The maximum bid for a target.
+          format: double
+      required:
+        - bid
+    UpdateTargetBidValue:
+      type: object
+      properties:
+        bid:
+          $ref: '#/components/schemas/UpdateTargetBid'
+    UpdateTargetRequest:
+      type: object
+      properties:
+        targets:
+          type: array
+          items:
+            $ref: '#/components/schemas/TargetUpdate'
+          maxItems: 1000
+          minItems: 1
+  parameters:
+    ClientIdHeader:
+      name: Amazon-Advertising-API-ClientId
+      in: header
+      description: The identifier of a client associated with a 'Login with Amazon' account.
+      schema:
+        type: string
+      required: true
+    ScopeHeader:
+      name: Amazon-Advertising-API-Scope
+      in: header
+      description: The identifier of a profile associated with the advertiser account. Use GET method on Profiles resource to list profiles associated with the access token passed in the HTTP Authorization header and choose profile id profileId from the response to pass it as input.
+      schema:
+        type: string
+      required: true
+x-amazon-apigateway-request-validator: full
+x-amazon-apigateway-request-validators:
+  full:
+    validateRequestParameters: true
+    validateRequestBody: true
