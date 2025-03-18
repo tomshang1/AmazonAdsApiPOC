@@ -16,8 +16,11 @@
                             <goal>generate</goal>
                         </goals>
                         <configuration>
-                            <inputSpec>${project.basedir}/src/main/resources/acmsApiContract2.yaml</inputSpec>
+                            <inputSpec>${project.basedir}/src/main/resources/acmsApiContractUpdated.yaml</inputSpec>
                             <generatorName>java</generatorName>
+                            <configOptions>
+                                <dateLibrary>java17-localdatetime</dateLibrary>
+                            </configOptions>
                         </configuration>
                     </execution>
                 </executions>

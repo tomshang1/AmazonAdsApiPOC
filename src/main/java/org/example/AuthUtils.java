@@ -1,10 +1,12 @@
 package org.example;
 
 import lombok.extern.slf4j.Slf4j;
-import org.apache.oltu.oauth2.common.OAuth;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.openapitools.client.ApiClient;
+import org.openapitools.client.api.AdGroupsApi;
+import org.openapitools.client.api.CampaignsApi;
+import org.openapitools.client.api.TargetsApi;
 
 import java.io.IOException;
 import java.net.URI;
@@ -16,8 +18,7 @@ import java.util.Map;
 
 @Slf4j
 public class AuthUtils {
-
-    private final static String CLIENT_ID_HEADER_NAME = "Amazon-Advertising-API-ClientId";
+    private static final String BASE_URL = "https://advertising-api.amazon.com";
     private static final String AUTHORIZATION_HEADER_NAME = "Authorization";
     private static final String GET_ACCESS_TOKEN_BODY = "{" +
             "\"grant_type\": \"authorization_code\"," +
@@ -33,19 +34,29 @@ public class AuthUtils {
             "\"client_secret\": \"%s\"" +
             "}";
 
+    public static final String CLIENT_ID_HEADER_NAME = "Amazon-Advertising-API-ClientId";
+    public static final String CLIENT_SECRET_HEADER_NAME = "Amazon-Advertising-API-ClientSecret";
+    public static final String PROFILE_ID_HEADER_NAME = "profile_id";
     public static final String ACCESS_TOKEN_HEADER_NAME = "access_token";
     public static final String REFRESH_TOKEN_HEADER_NAME = "refresh_token";
 
-    public static ApiClient getApiClient(final String authCode, final String clientId, final String clientSecret) {
+    public static CampaignsApi getCampaignsApi() {
+        return new CampaignsApi(getApiClient());
+    }
+
+    public static AdGroupsApi getAdGroupsApi() {
+        return new AdGroupsApi(getApiClient());
+    }
+
+    public static TargetsApi getTargetsApi() {
+        return new TargetsApi(getApiClient());
+    }
+
+    public static ApiClient getApiClient() {
         log.info("Start building the ads api client");
 
-        final Map<String, String> parameters = Map.of(
-                OAuth.OAUTH_GRANT_TYPE, "authorization_code",
-                OAuth.OAUTH_CODE, authCode,
-                OAuth.OAUTH_REDIRECT_URI, "https://www.example.com/login.php"
-        );
-
-        ApiClient apiClient = new ApiClient(clientId, clientSecret, parameters);
+        ApiClient apiClient = new ApiClient();
+        apiClient.setBasePath(BASE_URL);
         log.info("Completed building the ads api client");
         return apiClient;
     }
