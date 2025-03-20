@@ -1,4 +1,4 @@
-package org.example.objectUtils;
+package org.example.ApiFunctionalityTesting.objectUtils;
 
 import org.openapitools.client.model.AdGroupCreate;
 import org.openapitools.client.model.AdProduct;
@@ -18,45 +18,54 @@ import org.openapitools.client.model.InventoryType;
 import org.openapitools.client.model.Marketplace;
 import org.openapitools.client.model.MarketplaceScope;
 import org.openapitools.client.model.State;
-import org.threeten.bp.OffsetDateTime;
-import org.threeten.bp.ZoneId;
-import org.threeten.bp.temporal.ChronoUnit;
-
+import java.time.Clock;
+import java.time.Instant;
+import java.time.ZoneId;
 import java.time.ZoneOffset;
+import java.time.temporal.ChronoUnit;
+import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 import static org.example.CommonUtils.generateName;
 
-public class SPAdGroupUtils {
-    public static CreateAdGroupRequest buildCreateAdGroupRequest(final String campaignId) {
+public class AdGroupUtils {
+    public static CreateAdGroupRequest buildCreateAdGroupRequest(final String campaignId, final AdProduct adProduct) {
         final CreateAdGroupRequest createCampaignRequest = new CreateAdGroupRequest();
-        createCampaignRequest.setAdGroups(List.of(buildAdGroupCreate(campaignId)));
+        createCampaignRequest.setAdGroups(List.of(buildAdGroupCreate(campaignId, adProduct)));
         return createCampaignRequest;
     }
 
-    private static AdGroupCreate buildAdGroupCreate(final String campaignId) {
+    private static AdGroupCreate buildAdGroupCreate(final String campaignId, final AdProduct adProduct) {
         final CreateStates createStates = new CreateStates();
         createStates.setState(State.PAUSED);
 
         final AdGroupCreate adGroupCreate = new AdGroupCreate();
-        adGroupCreate.setInventoryType(InventoryType.DISPLAY);
-        adGroupCreate.setAdProduct(AdProduct.SPONSORED_PRODUCTS);
-        adGroupCreate.setMarketplaces(List.of(Marketplace.US));
-        adGroupCreate.setCampaignId(campaignId);
-        adGroupCreate.setCreativeRotationType(CreativeRotationType.RANDOM);
-        adGroupCreate.setFrequencies(List.of());
-        adGroupCreate.setFees(List.of());
-        adGroupCreate.setOptimization(buildCreateOptimization());
-        adGroupCreate.setTargetingSettings(buildCreateTargetingSettings());
-        adGroupCreate.setStartDateTime(OffsetDateTime
-                .now(ZoneId.of(String.valueOf(ZoneOffset.UTC)))
-                .truncatedTo(ChronoUnit.MINUTES)
-                .plusMinutes(1000));
-        adGroupCreate.setState(createStates);
-        adGroupCreate.setName(generateName("UNIFIED_ADGroup"));
-        adGroupCreate.setPacing(buildCreatePacing());
-        adGroupCreate.setMarketplaceScope(MarketplaceScope.SINGLE_MARKETPLACE);
-        adGroupCreate.setBid(buildCreateAdGroupBidValue());
+        // TODO: Add AdGroup common fields addition
+        if (Objects.equals(AdProduct.SPONSORED_PRODUCTS, adProduct)) {
+            adGroupCreate.setInventoryType(InventoryType.DISPLAY);
+            adGroupCreate.setAdProduct(adProduct);
+            adGroupCreate.setMarketplaces(List.of(Marketplace.US));
+            adGroupCreate.setCampaignId(campaignId);
+            adGroupCreate.setCreativeRotationType(CreativeRotationType.RANDOM);
+            adGroupCreate.setFrequencies(List.of());
+            adGroupCreate.setFees(List.of());
+            adGroupCreate.setOptimization(buildCreateOptimization());
+            adGroupCreate.setTargetingSettings(buildCreateTargetingSettings());
+            adGroupCreate.setStartDateTime(
+                    Date.from(Instant.now(Clock.system(ZoneId.of(String.valueOf(ZoneOffset.UTC))))
+                            .truncatedTo(ChronoUnit.MINUTES)
+                            .plusSeconds(100000)
+                    )
+            );
+            adGroupCreate.setState(createStates);
+            adGroupCreate.setName(generateName("UNIFIED_ADGroup"));
+            adGroupCreate.setPacing(buildCreatePacing());
+            adGroupCreate.setMarketplaceScope(MarketplaceScope.SINGLE_MARKETPLACE);
+            adGroupCreate.setBid(buildCreateAdGroupBidValue());
+        } else if (Objects.equals(AdProduct.SPONSORED_BRANDS, adProduct)) {
+            //  TODO: Add SB AdGroup Create implementation
+        }
 
         return adGroupCreate;
     }

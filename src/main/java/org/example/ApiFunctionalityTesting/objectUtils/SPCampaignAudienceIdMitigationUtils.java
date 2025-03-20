@@ -1,4 +1,4 @@
-package org.example.objectUtils;
+package org.example.ApiFunctionalityTesting.objectUtils;
 
 import org.apache.commons.lang3.StringUtils;
 import org.example.objectApi.CampaignsApiService;
@@ -21,12 +21,12 @@ import java.util.Objects;
 
 import static org.example.AuthUtils.getCampaignsApi;
 import static org.example.Main.AUTH_MAP;
-import static org.example.objectUtils.SPCampaignUtils.buildTestQueryCampaignRequest;
+import static org.example.ApiFunctionalityTesting.objectUtils.CampaignUtils.buildTestQueryCampaignRequest;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 public class SPCampaignAudienceIdMitigationUtils {
-    private static final CampaignsApiService campaignsApiService = new CampaignsApiService(getCampaignsApi(), AUTH_MAP);
+    private static final CampaignsApiService SP_CAMPAIGNS_API_SERVICE = new CampaignsApiService(getCampaignsApi(), AUTH_MAP);
 
     public static UpdateCampaignRequest buildUpdateCampaignsRequestContextAudienceId(final String campaignId) {
         final UpdateCampaignRequest requestContent = new UpdateCampaignRequest();
@@ -92,14 +92,14 @@ public class SPCampaignAudienceIdMitigationUtils {
     public static void main(String[] args) throws Exception {
         // Query Campaign
         final CampaignSuccessResponse spListUpdateResponseContent
-                = campaignsApiService.listCampaign(buildTestQueryCampaignRequest(AdProduct.SPONSORED_PRODUCTS));
+                = SP_CAMPAIGNS_API_SERVICE.listCampaign(buildTestQueryCampaignRequest(AdProduct.SPONSORED_PRODUCTS));
 
         final List<String> affectedCampaignIds = getAffectedCampaignIds(spListUpdateResponseContent);
 
         System.out.println("CampaignId List size: " + affectedCampaignIds.size() + "CAMPAIGNID's: " + affectedCampaignIds);
 
         // Update Campaign with enabled state
-        final CampaignMultiStatusResponseWithPartialErrors updateCampaignResponse = campaignsApiService.updateCampaign(buildUpdateCampaignsRequestContextAudienceId(affectedCampaignIds.get(0)));
+        final CampaignMultiStatusResponseWithPartialErrors updateCampaignResponse = SP_CAMPAIGNS_API_SERVICE.updateCampaign(buildUpdateCampaignsRequestContextAudienceId(affectedCampaignIds.get(0)));
         assertNotNull(updateCampaignResponse.getSuccess());
         assertEquals(1, updateCampaignResponse.getSuccess().size());
 

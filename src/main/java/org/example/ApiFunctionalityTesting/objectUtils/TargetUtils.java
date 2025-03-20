@@ -1,4 +1,4 @@
-package org.example.objectUtils;
+package org.example.ApiFunctionalityTesting.objectUtils;
 
 import org.openapitools.client.model.AdProduct;
 import org.openapitools.client.model.CreateProductCategoryRefinement;
@@ -22,30 +22,35 @@ import org.openapitools.client.model.UpdateStates;
 import org.openapitools.client.model.UpdateTargetRequest;
 
 import java.util.List;
+import java.util.Objects;
 
-public class SPTargetUtils {
-    public static CreateTargetRequest buildCreateTargetRequestContent(final String campaignId, final String adGroupId) {
+public class TargetUtils {
+    public static CreateTargetRequest buildCreateTargetRequestContent(final String campaignId, final String adGroupId, final AdProduct adProduct) {
         final CreateTargetRequest requestContent = new CreateTargetRequest();
-        requestContent.addTargetsItem(buildTargetCreate(campaignId, adGroupId));
+        requestContent.addTargetsItem(buildTargetCreate(campaignId, adGroupId, adProduct));
         return requestContent;
     }
 
-    private static TargetCreate buildTargetCreate(final String campaignId, final String adGroupId) {
-
+    private static TargetCreate buildTargetCreate(final String campaignId, final String adGroupId, final AdProduct adProduct) {
         final CreateStates createStates = new CreateStates();
         createStates.setState(State.PAUSED);
-
         final TargetCreate targetCreate = new TargetCreate();
-        targetCreate.setMarketplaces(List.of(Marketplace.US));
-        targetCreate.setAdProduct(AdProduct.SPONSORED_PRODUCTS);
-        targetCreate.setCampaignId(campaignId);
-        targetCreate.setTargetType(TargetType.PRODUCT);
-        targetCreate.setAdGroupId(adGroupId);
-        targetCreate.setNegative(false);
-        targetCreate.setState(createStates);
-        targetCreate.setMarketplaceScope(MarketplaceScope.SINGLE_MARKETPLACE);
-        targetCreate.setBid(buildCreateTargetBidValue());
-        targetCreate.setTargetDetails(buildCreateTargetDetails());
+        // TODO: Add AdGroup common fields addition
+
+        if (Objects.equals(AdProduct.SPONSORED_PRODUCTS, adProduct)) {
+            targetCreate.setMarketplaces(List.of(Marketplace.US));
+            targetCreate.setAdProduct(adProduct);
+            targetCreate.setCampaignId(campaignId);
+            targetCreate.setTargetType(TargetType.PRODUCT);
+            targetCreate.setAdGroupId(adGroupId);
+            targetCreate.setNegative(false);
+            targetCreate.setState(createStates);
+            targetCreate.setMarketplaceScope(MarketplaceScope.SINGLE_MARKETPLACE);
+            targetCreate.setBid(buildCreateTargetBidValue());
+            targetCreate.setTargetDetails(buildCreateTargetDetails());
+        } else if (Objects.equals(AdProduct.SPONSORED_BRANDS, adProduct)) {
+            //  TODO: Add SB AdGroup Create implementation
+        }
 
         return targetCreate;
     }

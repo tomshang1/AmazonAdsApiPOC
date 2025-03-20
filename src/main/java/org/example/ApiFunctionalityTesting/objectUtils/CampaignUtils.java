@@ -1,4 +1,4 @@
-package org.example.objectUtils;
+package org.example.ApiFunctionalityTesting.objectUtils;
 
 import org.openapitools.client.model.AdProduct;
 import org.openapitools.client.model.BidStrategy;
@@ -8,6 +8,7 @@ import org.openapitools.client.model.CampaignCampaignIdFilter;
 import org.openapitools.client.model.CampaignCreate;
 import org.openapitools.client.model.CampaignStateFilter;
 import org.openapitools.client.model.CampaignUpdate;
+import org.openapitools.client.model.CostType;
 import org.openapitools.client.model.CreateAutoCreationSettings;
 import org.openapitools.client.model.CreateBidAdjustments;
 import org.openapitools.client.model.CreateBidSettings;
@@ -15,6 +16,7 @@ import org.openapitools.client.model.CreateBudget;
 import org.openapitools.client.model.CreateBudgetValue;
 import org.openapitools.client.model.CreateCampaignOptimizations;
 import org.openapitools.client.model.CreateCampaignRequest;
+import org.openapitools.client.model.CreateGoalSettings;
 import org.openapitools.client.model.CreateMonetaryBudget;
 import org.openapitools.client.model.CreateMonetaryBudgetMarketplaceSetting;
 import org.openapitools.client.model.CreateMonetaryBudgetValue;
@@ -22,6 +24,7 @@ import org.openapitools.client.model.CreatePlacementBidAdjustment;
 import org.openapitools.client.model.CreateShopperCohortBidAdjustment;
 import org.openapitools.client.model.CreateStates;
 import org.openapitools.client.model.DeleteCampaignRequest;
+import org.openapitools.client.model.Goal;
 import org.openapitools.client.model.Marketplace;
 import org.openapitools.client.model.MarketplaceScope;
 import org.openapitools.client.model.Placement;
@@ -31,16 +34,19 @@ import org.openapitools.client.model.ShopperCohortType;
 import org.openapitools.client.model.State;
 import org.openapitools.client.model.UpdateCampaignRequest;
 import org.openapitools.client.model.UpdateStates;
-import org.threeten.bp.OffsetDateTime;
-import org.threeten.bp.ZoneId;
-import org.threeten.bp.temporal.ChronoUnit;
 
+import java.time.Clock;
+import java.time.Instant;
+import java.time.ZoneId;
 import java.time.ZoneOffset;
+import java.time.temporal.ChronoUnit;
+import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 import static org.example.CommonUtils.generateName;
 
-public class SPCampaignUtils {
+public class CampaignUtils {
 
     public static QueryCampaignRequest buildTestQueryCampaignRequest(final AdProduct adProduct) {
         final CampaignStateFilter stateFilter = new CampaignStateFilter();
@@ -70,38 +76,83 @@ public class SPCampaignUtils {
         return queryCampaignRequest;
     }
 
-    public static CreateCampaignRequest buildTestCreateCampaignRequest() {
+    public static CreateCampaignRequest buildTestCreateCampaignRequest(final AdProduct adProduct) {
         final CreateCampaignRequest createCampaignRequest = new CreateCampaignRequest();
-        createCampaignRequest.setCampaigns(List.of(buildCampaignCreate()));
+        createCampaignRequest.setCampaigns(List.of(buildCampaignCreate(adProduct)));
         return createCampaignRequest;
     }
 
-    private static CampaignCreate buildCampaignCreate() {
-        final CreateStates createStates = new CreateStates();
-        createStates.setState(State.PAUSED);
-
+    private static CampaignCreate buildCampaignCreate(final AdProduct adProduct) {
         final CampaignCreate campaignCreate = new CampaignCreate();
-        campaignCreate.setTags(List.of());
-        final CreateAutoCreationSettings createAutoCreationSettings = new CreateAutoCreationSettings();
-        createAutoCreationSettings.setAutoCreateTargets(false);
-        campaignCreate.setAutoCreationSettings(createAutoCreationSettings);
 
-        campaignCreate.setAdProduct(AdProduct.SPONSORED_PRODUCTS);
-        campaignCreate.setName(generateName("UNIFIED_CAMPAIGN"));
-        campaignCreate.setState(createStates);
-        campaignCreate.setMarketplaces(List.of(Marketplace.US));
-        campaignCreate.setOptimizations(buildCreateCampaignOptimizations());
+        addCampaignCreateCommonFields(campaignCreate);
 
-        campaignCreate.setMarketplaceScope(MarketplaceScope.SINGLE_MARKETPLACE);
-        campaignCreate.setBudgets(List.of(buildCreateBudget()));
-        campaignCreate.setStartDateTime(OffsetDateTime
-                .now(ZoneId.of(String.valueOf(ZoneOffset.UTC)))
-                .truncatedTo(ChronoUnit.MINUTES)
-                .plusMinutes(1000));
+        if (Objects.equals(AdProduct.SPONSORED_PRODUCTS, adProduct)) {
+            final CreateAutoCreationSettings createAutoCreationSettings = new CreateAutoCreationSettings();
+            createAutoCreationSettings.setAutoCreateTargets(false);
+            campaignCreate.setAutoCreationSettings(createAutoCreationSettings);
+            campaignCreate.setAdProduct(adProduct);
+            campaignCreate.setOptimizations(buildCreateCampaignOptimizationsSP());
+            campaignCreate.setBudgets(List.of(buildCreateBudget()));
+        } else if (Objects.equals(AdProduct.SPONSORED_BRANDS, adProduct)) {
+            // TODO: Find mapping for Unified productLocation field
+            // TODO: Find mapping for Unified smartDefault field
+            campaignCreate.setBrandId("TEST_BRAND_ID"); // TODO: get valid brandId
+            campaignCreate.setPortfolioId("TEST_PORTFOLIO_ID"); // TODO: get valid portfolioId
+            campaignCreate.setOptimizations(buildCreateCampaignOptimizationsSB());
+            campaignCreate.setCostType(CostType.CPC);
+            campaignCreate.setAdProduct(adProduct);
+            campaignCreate.setBudgets(List.of(buildCreateBudget())); // Not sure if SB different
+            // TODO: Check if below fields are required for SB Campaigns
+            final CreateAutoCreationSettings createAutoCreationSettings = new CreateAutoCreationSettings();
+            createAutoCreationSettings.setAutoCreateTargets(false);
+            campaignCreate.setAutoCreationSettings(createAutoCreationSettings);
+        }
+
+
         return campaignCreate;
     }
 
-    private static CreateCampaignOptimizations  buildCreateCampaignOptimizations() {
+
+
+    private static void addCampaignCreateCommonFields(final CampaignCreate campaignCreate) {
+        final CreateStates createStates = new CreateStates();
+        createStates.setState(State.PAUSED);
+
+        campaignCreate.setState(createStates);
+        campaignCreate.setTags(List.of());
+        campaignCreate.setName(generateName("UNIFIED_CAMPAIGN"));
+        campaignCreate.setMarketplaces(List.of(Marketplace.US));
+        campaignCreate.setMarketplaceScope(MarketplaceScope.SINGLE_MARKETPLACE);
+        campaignCreate.setStartDateTime(
+                Date.from(Instant.now(Clock.system(ZoneId.of(String.valueOf(ZoneOffset.UTC))))
+                        .truncatedTo(ChronoUnit.MINUTES)
+                        .plusSeconds(100000)
+                )
+        );
+    }
+
+    private static CreateCampaignOptimizations  buildCreateCampaignOptimizationsSB() {
+        final CreateBidAdjustments createBidAdjustments = new CreateBidAdjustments();
+        createBidAdjustments.setPlacementBidAdjustments(buildCreatePlacementBidAdjustment());
+        // caused an issue with audienceId
+//        createBidAdjustments.setShopperCohortBidAdjustments(buildShopperCohortBidAdjustments());
+
+        final CreateBidSettings bidSettings = new CreateBidSettings();
+        bidSettings.bidAdjustments(createBidAdjustments);
+        bidSettings.setBidStrategy(BidStrategy.SALES_DOWN_ONLY);
+
+        final CreateGoalSettings createGoalSettings = new CreateGoalSettings();
+        createGoalSettings.setGoal(Goal.CONSIDERATION);
+        createGoalSettings.setKpiValue(100d);
+
+        final CreateCampaignOptimizations campaignOptimizations = new CreateCampaignOptimizations();
+        campaignOptimizations.bidSettings(bidSettings);
+        campaignOptimizations.setGoalSettings(createGoalSettings);
+        return campaignOptimizations;
+    }
+
+    private static CreateCampaignOptimizations  buildCreateCampaignOptimizationsSP() {
 
 
         final CreateBidAdjustments createBidAdjustments = new CreateBidAdjustments();
