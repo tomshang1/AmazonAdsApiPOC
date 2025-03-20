@@ -13,5 +13,4 @@ public class CommonUtils {
     public static String generateName(final String objectName) {
         return String.format("ACMS_Test_%s_%s_%s", objectName, FORMATTED_DATE_TIME, RandomStringUtils.randomAlphanumeric(8));
     }
-
 }

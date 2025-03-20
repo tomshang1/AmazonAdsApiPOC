@@ -61,5 +61,9 @@ public class Main {
         // TODO: Add SB campaigns + targets API functionality once SB API has been implemented in Unified APIs
 //        testCampaignApiFunctionality(CAMPAIGNS_API_SERVICE, AdProduct.SPONSORED_BRANDS);
 //        testTargetApiFunctionality(CAMPAIGNS_API_SERVICE, AD_GROUPS_API_SERVICE, TARGETS_API_SERVICE, AdProduct.SPONSORED_BRANDS);
+
+        // TODO: Add ADSP campaigns + targets API functionality once ADSP API has been implemented in Unified APIs
+//        testCampaignApiFunctionality(CAMPAIGNS_API_SERVICE, AdProduct.AMAZON_DSP);
+//        testTargetApiFunctionality(CAMPAIGNS_API_SERVICE, AD_GROUPS_API_SERVICE, TARGETS_API_SERVICE, AdProduct.AMAZON_DSP);
     }
 }

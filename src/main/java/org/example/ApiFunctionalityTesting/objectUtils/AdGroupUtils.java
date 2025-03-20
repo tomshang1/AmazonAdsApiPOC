@@ -37,37 +37,62 @@ public class AdGroupUtils {
     }
 
     private static AdGroupCreate buildAdGroupCreate(final String campaignId, final AdProduct adProduct) {
-        final CreateStates createStates = new CreateStates();
-        createStates.setState(State.PAUSED);
-
         final AdGroupCreate adGroupCreate = new AdGroupCreate();
+        addAdGroupCreateCommonFields(adGroupCreate, campaignId);
+
         // TODO: Add AdGroup common fields addition
         if (Objects.equals(AdProduct.SPONSORED_PRODUCTS, adProduct)) {
             adGroupCreate.setInventoryType(InventoryType.DISPLAY);
             adGroupCreate.setAdProduct(adProduct);
-            adGroupCreate.setMarketplaces(List.of(Marketplace.US));
-            adGroupCreate.setCampaignId(campaignId);
             adGroupCreate.setCreativeRotationType(CreativeRotationType.RANDOM);
             adGroupCreate.setFrequencies(List.of());
             adGroupCreate.setFees(List.of());
             adGroupCreate.setOptimization(buildCreateOptimization());
             adGroupCreate.setTargetingSettings(buildCreateTargetingSettings());
-            adGroupCreate.setStartDateTime(
-                    Date.from(Instant.now(Clock.system(ZoneId.of(String.valueOf(ZoneOffset.UTC))))
-                            .truncatedTo(ChronoUnit.MINUTES)
-                            .plusSeconds(100000)
-                    )
-            );
-            adGroupCreate.setState(createStates);
-            adGroupCreate.setName(generateName("UNIFIED_ADGroup"));
             adGroupCreate.setPacing(buildCreatePacing());
-            adGroupCreate.setMarketplaceScope(MarketplaceScope.SINGLE_MARKETPLACE);
             adGroupCreate.setBid(buildCreateAdGroupBidValue());
         } else if (Objects.equals(AdProduct.SPONSORED_BRANDS, adProduct)) {
-            //  TODO: Add SB AdGroup Create implementation
+            //  TODO: Add SB AdGroup Create implementation, for now, copying SP for more accurate LOC comparison
+//            adGroupCreate.setInventoryType(InventoryType.DISPLAY);
+//            adGroupCreate.setAdProduct(adProduct);
+//            adGroupCreate.setCreativeRotationType(CreativeRotationType.RANDOM);
+//            adGroupCreate.setFrequencies(List.of());
+//            adGroupCreate.setFees(List.of());
+//            adGroupCreate.setOptimization(buildCreateOptimization());
+//            adGroupCreate.setTargetingSettings(buildCreateTargetingSettings());
+//            adGroupCreate.setPacing(buildCreatePacing());
+//            adGroupCreate.setBid(buildCreateAdGroupBidValue());
+        } else if (Objects.equals(AdProduct.AMAZON_DSP, adProduct)) {
+            //  TODO: Add ADSP AdGroup Create implementation, for now, copying SP for more accurate LOC comparison
+//            adGroupCreate.setInventoryType(InventoryType.DISPLAY);
+//            adGroupCreate.setAdProduct(adProduct);
+//            adGroupCreate.setCreativeRotationType(CreativeRotationType.RANDOM);
+//            adGroupCreate.setFrequencies(List.of());
+//            adGroupCreate.setFees(List.of());
+//            adGroupCreate.setOptimization(buildCreateOptimization());
+//            adGroupCreate.setTargetingSettings(buildCreateTargetingSettings());
+//            adGroupCreate.setPacing(buildCreatePacing());
+//            adGroupCreate.setBid(buildCreateAdGroupBidValue());
         }
 
         return adGroupCreate;
+    }
+
+    private static void addAdGroupCreateCommonFields(final AdGroupCreate adGroupCreate, final String campaignId) {
+        final CreateStates createStates = new CreateStates();
+        createStates.setState(State.PAUSED);
+
+        adGroupCreate.setMarketplaces(List.of(Marketplace.US));
+        adGroupCreate.setCampaignId(campaignId);
+        adGroupCreate.setStartDateTime(
+                Date.from(Instant.now(Clock.system(ZoneId.of(String.valueOf(ZoneOffset.UTC))))
+                        .truncatedTo(ChronoUnit.MINUTES)
+                        .plusSeconds(100000)
+                )
+        );
+        adGroupCreate.setState(createStates);
+        adGroupCreate.setName(generateName("UNIFIED_ADGroup"));
+        adGroupCreate.setMarketplaceScope(MarketplaceScope.SINGLE_MARKETPLACE);
     }
 
     private static CreateOptimization buildCreateOptimization() {

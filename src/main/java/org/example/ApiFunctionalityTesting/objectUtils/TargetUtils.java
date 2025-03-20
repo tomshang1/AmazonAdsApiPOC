@@ -32,27 +32,32 @@ public class TargetUtils {
     }
 
     private static TargetCreate buildTargetCreate(final String campaignId, final String adGroupId, final AdProduct adProduct) {
-        final CreateStates createStates = new CreateStates();
-        createStates.setState(State.PAUSED);
         final TargetCreate targetCreate = new TargetCreate();
-        // TODO: Add AdGroup common fields addition
 
         if (Objects.equals(AdProduct.SPONSORED_PRODUCTS, adProduct)) {
-            targetCreate.setMarketplaces(List.of(Marketplace.US));
             targetCreate.setAdProduct(adProduct);
-            targetCreate.setCampaignId(campaignId);
             targetCreate.setTargetType(TargetType.PRODUCT);
-            targetCreate.setAdGroupId(adGroupId);
             targetCreate.setNegative(false);
-            targetCreate.setState(createStates);
-            targetCreate.setMarketplaceScope(MarketplaceScope.SINGLE_MARKETPLACE);
             targetCreate.setBid(buildCreateTargetBidValue());
             targetCreate.setTargetDetails(buildCreateTargetDetails());
         } else if (Objects.equals(AdProduct.SPONSORED_BRANDS, adProduct)) {
-            //  TODO: Add SB AdGroup Create implementation
+            //  TODO: Add SB Target Create implementation, for now, copying SP for more accurate LOC comparison
+        } else if (Objects.equals(AdProduct.AMAZON_DSP, adProduct)) {
+            //  TODO: Add ADSP Target Create implementation, for now, copying SP for more accurate LOC comparison
         }
 
         return targetCreate;
+    }
+
+    private static void addTargetCreateCommonFields(final TargetCreate targetCreate, final String campaignId, final String adGroupId) {
+        final CreateStates createStates = new CreateStates();
+        createStates.setState(State.PAUSED);
+
+        targetCreate.setMarketplaces(List.of(Marketplace.US));
+        targetCreate.setCampaignId(campaignId);
+        targetCreate.setAdGroupId(adGroupId);
+        targetCreate.setState(createStates);
+        targetCreate.setMarketplaceScope(MarketplaceScope.SINGLE_MARKETPLACE);
     }
 
     private static CreateTargetBidValue buildCreateTargetBidValue() {
@@ -78,6 +83,38 @@ public class TargetUtils {
         createTargetDetails.setProductCategoryTarget(createContentCategoryTarget);
         return createTargetDetails;
     }
+
+    //  TODO: Add SB Target Details implementation, for now, copying SP for more accurate LOC comparison
+//    private static CreateTargetDetails buildSBCreateTargetDetails() {
+//        final CreateProductCategoryRefinement createProductCategoryRefinement = new CreateProductCategoryRefinement();
+//        createProductCategoryRefinement.setProductCategoryId("12345");
+//
+//        final CreateProductCategoryRefinementValue createProductCategoryRefinementValue = new CreateProductCategoryRefinementValue();
+//        createProductCategoryRefinementValue.setProductCategoryRefinement(createProductCategoryRefinement);
+//
+//        final CreateProductCategoryTarget createContentCategoryTarget = new CreateProductCategoryTarget();
+//        createContentCategoryTarget.setProductCategoryRefinement(createProductCategoryRefinementValue);
+//
+//        final CreateTargetDetails createTargetDetails = new CreateTargetDetails();
+//        createTargetDetails.setProductCategoryTarget(createContentCategoryTarget);
+//        return createTargetDetails;
+//    }
+
+    //  TODO: Add ADSP Target Details implementation, for now, copying SP for more accurate LOC comparison
+//    private static CreateTargetDetails buildADSPCreateTargetDetails() {
+//        final CreateProductCategoryRefinement createProductCategoryRefinement = new CreateProductCategoryRefinement();
+//        createProductCategoryRefinement.setProductCategoryId("12345");
+//
+//        final CreateProductCategoryRefinementValue createProductCategoryRefinementValue = new CreateProductCategoryRefinementValue();
+//        createProductCategoryRefinementValue.setProductCategoryRefinement(createProductCategoryRefinement);
+//
+//        final CreateProductCategoryTarget createContentCategoryTarget = new CreateProductCategoryTarget();
+//        createContentCategoryTarget.setProductCategoryRefinement(createProductCategoryRefinementValue);
+//
+//        final CreateTargetDetails createTargetDetails = new CreateTargetDetails();
+//        createTargetDetails.setProductCategoryTarget(createContentCategoryTarget);
+//        return createTargetDetails;
+//    }
 
     public static QueryTargetRequest buildTestQueryTargetIdRequest(final String targetId) {
         final TargetTargetIdFilter targetIdFilter = new TargetTargetIdFilter();

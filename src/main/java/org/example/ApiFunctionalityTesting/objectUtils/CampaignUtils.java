@@ -107,13 +107,24 @@ public class CampaignUtils {
             final CreateAutoCreationSettings createAutoCreationSettings = new CreateAutoCreationSettings();
             createAutoCreationSettings.setAutoCreateTargets(false);
             campaignCreate.setAutoCreationSettings(createAutoCreationSettings);
+        } else if (Objects.equals(AdProduct.AMAZON_DSP, adProduct)) {
+            // TODO: Ad ADSP specific Campaign create fields, for now, copying SB for more accurate LOC comparison
+//            // TODO: Find mapping for Unified productLocation field
+//            // TODO: Find mapping for Unified smartDefault field
+//            campaignCreate.setBrandId("TEST_BRAND_ID"); // TODO: get valid brandId
+//            campaignCreate.setPortfolioId("TEST_PORTFOLIO_ID"); // TODO: get valid portfolioId
+//            campaignCreate.setOptimizations(buildCreateCampaignOptimizationsSB());
+//            campaignCreate.setCostType(CostType.CPC);
+//            campaignCreate.setAdProduct(adProduct);
+//            campaignCreate.setBudgets(List.of(buildCreateBudget())); // Not sure if SB different
+//            // TODO: Check if below fields are required for SB Campaigns
+//            final CreateAutoCreationSettings createAutoCreationSettings = new CreateAutoCreationSettings();
+//            createAutoCreationSettings.setAutoCreateTargets(false);
+//            campaignCreate.setAutoCreationSettings(createAutoCreationSettings);
         }
-
 
         return campaignCreate;
     }
-
-
 
     private static void addCampaignCreateCommonFields(final CampaignCreate campaignCreate) {
         final CreateStates createStates = new CreateStates();
@@ -154,9 +165,25 @@ public class CampaignUtils {
         return campaignOptimizations;
     }
 
-    private static CreateCampaignOptimizations  buildCreateCampaignOptimizationsSP() {
+    //  TODO: Add ADSP Campaign Optimization implementation, for now, copying SP for more accurate LOC comparison
+//    private static CreateCampaignOptimizations buildCreateCampaignOptimizationsADSP() {
+//        final CreateBidAdjustments createBidAdjustments = new CreateBidAdjustments();
+//        createBidAdjustments.setPlacementBidAdjustments(buildCreatePlacementBidAdjustment());
+//        // caused an issue with audienceId
+//        // ADDING SHOPPER COHORT FEATURE
+//        // Commenting for now as it may cause issues in beta
+////        createBidAdjustments.setShopperCohortBidAdjustments(buildShopperCohortBidAdjustments());
+//
+//        final CreateBidSettings bidSettings = new CreateBidSettings();
+//        bidSettings.bidAdjustments(createBidAdjustments);
+//        bidSettings.setBidStrategy(BidStrategy.SALES_DOWN_ONLY);
+//
+//        final CreateCampaignOptimizations campaignOptimizations = new CreateCampaignOptimizations();
+//        campaignOptimizations.bidSettings(bidSettings);
+//        return campaignOptimizations;
+//    }
 
-
+    private static CreateCampaignOptimizations buildCreateCampaignOptimizationsSP() {
         final CreateBidAdjustments createBidAdjustments = new CreateBidAdjustments();
         createBidAdjustments.setPlacementBidAdjustments(buildCreatePlacementBidAdjustment());
         // caused an issue with audienceId
