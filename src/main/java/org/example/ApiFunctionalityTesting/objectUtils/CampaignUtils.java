@@ -136,6 +136,7 @@ public class CampaignUtils {
         final CreateBidAdjustments createBidAdjustments = new CreateBidAdjustments();
         createBidAdjustments.setPlacementBidAdjustments(buildCreatePlacementBidAdjustment());
         // caused an issue with audienceId
+        // ADDING SHOPPER COHORT FEATURE
 //        createBidAdjustments.setShopperCohortBidAdjustments(buildShopperCohortBidAdjustments());
 
         final CreateBidSettings bidSettings = new CreateBidSettings();
@@ -158,6 +159,7 @@ public class CampaignUtils {
         final CreateBidAdjustments createBidAdjustments = new CreateBidAdjustments();
         createBidAdjustments.setPlacementBidAdjustments(buildCreatePlacementBidAdjustment());
         // caused an issue with audienceId
+        // ADDING SHOPPER COHORT FEATURE
 //        createBidAdjustments.setShopperCohortBidAdjustments(buildShopperCohortBidAdjustments());
 
         final CreateBidSettings bidSettings = new CreateBidSettings();
